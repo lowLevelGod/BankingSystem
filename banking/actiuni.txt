@@ -1,0 +1,10 @@
+1. Creare cont nou
+2. Creare client persoana fizica
+3. Creare client persoana juridica 
+4. Depozitare bani in cont 
+5. Extragere bani din cont 
+6. Transfer intre conturi
+7. Citire detalii tranzactie
+8. Citire detalii cont 
+9. Creare card credit
+10. Citire detalii card credit

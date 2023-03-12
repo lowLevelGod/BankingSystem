@@ -1,0 +1,9 @@
+1. Account
+2. AccountFactory
+3. AccountService
+4. Artificial customer
+5. Natural customer 
+6. CustomerService
+7. Deposit transaction
+8. Withdrawal transaction 
+9. TransactionService
