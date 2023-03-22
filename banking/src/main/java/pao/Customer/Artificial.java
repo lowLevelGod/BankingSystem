@@ -26,7 +26,7 @@ public class Artificial extends Customer {
     public Account createAccount(String accId){
         AccountFactory factory = new AccountFactory();
         
-        Account acc = factory.createBaseAccount(accId, 5, super.getId());
+        Account acc = factory.createBaseAccount(accId, 5, this);
 
         return acc;
     }

@@ -2,6 +2,8 @@ package pao.Transaction;
 
 import java.sql.Date;
 
+import pao.BankException.AccountException;
+
 public abstract class Transaction {
     private String id;
     private String details;
@@ -15,7 +17,7 @@ public abstract class Transaction {
         this.amount = amount;
     }
 
-    public abstract boolean performTransaction();
+    public abstract void performTransaction() throws AccountException;
 
     public String getId(){
         return this.id;

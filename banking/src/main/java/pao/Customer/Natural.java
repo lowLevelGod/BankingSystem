@@ -29,7 +29,7 @@ public class Natural extends Customer {
     public Account createAccount(String accId){
         AccountFactory factory = new AccountFactory();
         
-        Account acc = factory.createBaseAccount(accId, 2, super.getId());
+        Account acc = factory.createBaseAccount(accId, 2, this);
 
         return acc;
     }

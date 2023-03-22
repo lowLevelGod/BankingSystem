@@ -3,6 +3,7 @@ package pao.Transaction;
 import java.sql.Date;
 
 import pao.Account.Account;
+import pao.BankException.AccountException;
 import pao.Customer.Customer;
 
 public class Deposit extends Transaction{
@@ -17,8 +18,8 @@ public class Deposit extends Transaction{
         this.account = account;
     }
 
-    public boolean performTransaction(){
-        return this.account.addAmount(getAmount());
+    public void performTransaction() throws AccountException{
+        this.account.addAmount(getAmount());
     }
     
 }

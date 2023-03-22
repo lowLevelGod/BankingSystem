@@ -42,6 +42,7 @@ public class App
         c3.addPendingTransaction(t4[0]);
         c3.addPendingTransaction(t4[1]);
 
+        // store in database only successful transactions
         c1.performPendingTransactions();
         c3.performPendingTransactions();
 

@@ -2,14 +2,21 @@ package pao.Customer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import pao.Account.Account;
+import pao.BankException.AccountException;
 import pao.Transaction.Transaction;
 
 public abstract class Customer {
 
     private String id;
     private ArrayList<Transaction> pendingTransactions;
+
+    private void sortTransactionsByDate(){
+        Collections.sort(pendingTransactions,
+                (t1, t2) -> t1.getDate().compareTo(t2.getDate()));
+    }
 
     public Customer(String id) {
         this.id = id;
@@ -30,19 +37,30 @@ public abstract class Customer {
 
     public void addPendingTransaction(Transaction t) {
         this.pendingTransactions.add(t);
-        Collections.sort(pendingTransactions,
-                (t1, t2) -> t1.getDate().compareTo(t2.getDate()));
+
+        // keep transactions sorted after adding new pending
+        sortTransactionsByDate();
     }
 
+    // returns successsful transactions
+    // successful transactions are removed from pending list
     public ArrayList<Transaction> performPendingTransactions() {
-        ArrayList<Transaction> failed = new ArrayList<Transaction>();
+
+        ArrayList<Transaction> successful = new ArrayList<Transaction>();
 
         for (Transaction t : this.pendingTransactions) {
-            boolean result = t.performTransaction();
-            if (!result)
-                failed.add(t);
+            try {
+                t.performTransaction();
+                successful.add(t);
+                this.pendingTransactions.remove(t);
+            } catch (AccountException exception) {
+                System.out.println(exception.getMessage());
+            }
         }
 
-        return failed;
+        // keep transactions sorted after removing successful ones
+        sortTransactionsByDate();
+
+        return successful;
     }
 }

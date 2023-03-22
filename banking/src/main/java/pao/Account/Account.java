@@ -1,39 +1,43 @@
 package pao.Account;
 
+import pao.BankException.AccountException;
+import pao.Customer.Customer;
+
 public class Account {
     private String id;
     private int interest;
-    private String ownerId;
+    private Customer owner;
     private int amount;
 
-    public Account(String id, int interest, String ownerId, int amount) {
+    public Account(String id, int interest, Customer owner, int amount) {
         this.id = id;
         this.interest = interest;
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.amount = amount;
     }
 
-    public boolean addAmount(int amount) {
+    public void addAmount(int amount) {
         this.amount += amount;
-
-        return true;
     }
 
-    public boolean subtractAmount(int amount) {
+    public void subtractAmount(int amount) throws AccountException {
         if (this.amount >= 0) {
             this.amount -= amount;
-            return true;
+        }else{
+            throw new AccountException("Insufficient funds!");
         }
-
-        return false;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+    }
+
+    public String getId(){
+        return this.id;
     }
 
     public String getOwnerId() {
-        return this.ownerId;
+        return this.owner.getId();
     }
 
     public int getInterest() {
