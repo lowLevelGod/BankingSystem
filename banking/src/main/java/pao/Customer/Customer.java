@@ -1,8 +1,7 @@
 package pao.Customer;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.TreeSet;
 
 import pao.Account.Account;
 import pao.BankException.AccountException;
@@ -11,16 +10,12 @@ import pao.Transaction.Transaction;
 public abstract class Customer {
 
     private String id;
-    private ArrayList<Transaction> pendingTransactions;
-
-    private void sortTransactionsByDate(){
-        Collections.sort(pendingTransactions,
-                (t1, t2) -> t1.getDate().compareTo(t2.getDate()));
-    }
+    // using TreeSet to keep transactions ordered by date
+    private TreeSet<Transaction> pendingTransactions;
 
     public Customer(String id) {
         this.id = id;
-        pendingTransactions = new ArrayList<Transaction>();
+        pendingTransactions = new TreeSet<Transaction>();
     }
 
     public abstract String getName();
@@ -37,9 +32,6 @@ public abstract class Customer {
 
     public void addPendingTransaction(Transaction t) {
         this.pendingTransactions.add(t);
-
-        // keep transactions sorted after adding new pending
-        sortTransactionsByDate();
     }
 
     // returns successsful transactions
@@ -52,14 +44,14 @@ public abstract class Customer {
             try {
                 t.performTransaction();
                 successful.add(t);
-                this.pendingTransactions.remove(t);
             } catch (AccountException exception) {
                 System.out.println(exception.getMessage());
             }
         }
 
-        // keep transactions sorted after removing successful ones
-        sortTransactionsByDate();
+        // remove successful transactions
+        for (Transaction t : successful)
+            this.pendingTransactions.remove(t);
 
         return successful;
     }
