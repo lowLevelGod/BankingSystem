@@ -1,9 +1,23 @@
+## Obiecte
+
+### Cont 
 1. Account
 2. AccountFactory
 3. AccountService
-4. Artificial customer
-5. Natural customer 
-6. CustomerService
-7. Deposit transaction
-8. Withdrawal transaction 
-9. TransactionService
+4. AccountDL (interfata pentru baza de date / dictionar in-memory)
+### Client
+5. Artificial 
+6. Natural 
+7. CustomerService
+8. CustomerDL (interfata pentru baza de date / dictionar in-memory)
+### Tranzactie
+9. Deposit
+10. Withdraw
+11. TransactionService
+12. TransactionDL (interfata pentru baza de date / dictionar in-memory)
+### Exceptii
+13. AccountException
+14. CustomerException
+15. TransactionException
+### Utils
+16. Demo

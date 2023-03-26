@@ -1,10 +1,20 @@
+## Actiuni
+
+### Cont banca
 1. Creare cont nou
-2. Creare client persoana fizica
-3. Creare client persoana juridica 
-4. Depozitare bani in cont 
-5. Extragere bani din cont 
-6. Transfer intre conturi
-7. Citire detalii tranzactie
-8. Citire detalii cont 
-9. Creare card credit
-10. Citire detalii card credit
+2. Stergere cont 
+3. Actualizare informatii cont 
+4. Citire informatii cont 
+### Client banca
+5. Creare client persoana fizica
+6. Creare client persoana juridica 
+7. Stergere client 
+8. Actualizare informatii client 
+9. Citire informatii client 
+### Tranzactii banca
+10. Depozitare bani in cont 
+11. Extragere bani din cont 
+12. Transfer intre conturi
+13. Citire detalii tranzactie
+14. Adaugare tranzactii neefectuate pe client 
+15. Efectuarea tranzactiilor facute de client si stocarea celor reusite
