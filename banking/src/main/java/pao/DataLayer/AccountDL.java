@@ -6,6 +6,8 @@ import pao.Account.Account;
 import pao.BankException.AccountException;
 
 public class AccountDL {
+
+    // placeholder for database service
     private HashMap<String, Account> accounts;
 
     public AccountDL(){
@@ -43,7 +45,7 @@ public class AccountDL {
 
         Account account = accounts.get(id);
         if (account == null){
-            throw new AccountException("Failed to retrieve customer data. ID " + id + " does not exist!");
+            throw new AccountException("Failed to retrieve account data. ID " + id + " does not exist!");
         }
 
         return account;

@@ -1,5 +1,6 @@
 package pao.DataLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import pao.BankException.TransactionException;
@@ -8,6 +9,7 @@ import pao.Transaction.Transaction;
 
 public class TransactionDL {
 
+    // placeholder for database service
     private HashMap<String, Transaction> transactions;
 
     public TransactionDL() {
@@ -42,13 +44,17 @@ public class TransactionDL {
     }
 
     // only successful transactions will be stored
-    public void storePendingTransactions(Customer customer) {
+    public ArrayList<Transaction> storePendingTransactions(Customer customer) {
+
+        ArrayList<Transaction> res = new ArrayList<Transaction>();
         for (Transaction t : customer.performPendingTransactions()) {
             try {
                 this.createTransaction(t);
+                res.add(t);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+        return res;
     }
 }

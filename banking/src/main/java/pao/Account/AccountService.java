@@ -5,7 +5,7 @@ import pao.Customer.Customer;
 import pao.DataLayer.AccountDL;
 
 public class AccountService {
-    private int id = 0;
+    private int id = 1;
     private AccountDL accounts;
 
     public AccountService(){

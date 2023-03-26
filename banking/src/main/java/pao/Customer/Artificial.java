@@ -2,8 +2,9 @@ package pao.Customer;
 
 import pao.Account.Account;
 import pao.Account.AccountFactory;
+import pao.Utils.Typeable;
 
-public class Artificial extends Customer {
+public class Artificial extends Customer implements Typeable {
     private String companyName;
 
     public Artificial(String id, String companyName){
@@ -11,11 +12,19 @@ public class Artificial extends Customer {
         this.companyName = companyName;
     }
 
+    public String getType(){
+        return "Artificial customer";
+    }
+
     private String getCompanyName() {
         return this.companyName;
     }
 
-    public void setCompanyName(String companyName) {
+    public String toString(){
+        return this.getType() + " " + "'" + this.getCompanyName() + "'";
+    }
+
+    public void setName(String companyName) {
         this.companyName = companyName;
     }
 
@@ -26,7 +35,8 @@ public class Artificial extends Customer {
     public Account createAccount(String accId){
         AccountFactory factory = new AccountFactory();
         
-        Account acc = factory.createBaseAccount(accId, 5, this);
+        final int artificialInterest = 5;
+        Account acc = factory.createBaseAccount(accId, artificialInterest, this);
 
         return acc;
     }

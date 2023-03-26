@@ -21,7 +21,7 @@ public class Account {
     }
 
     public void subtractAmount(int amount) throws AccountException {
-        if (this.amount >= 0) {
+        if (this.amount >= amount) {
             this.amount -= amount;
         }else{
             throw new AccountException("Insufficient funds!");
@@ -46,5 +46,9 @@ public class Account {
 
     public int getAmount() {
         return this.amount;
+    }
+
+    public String toString(){
+        return "Account" + " " + "owned by " + owner.toString();
     }
 }

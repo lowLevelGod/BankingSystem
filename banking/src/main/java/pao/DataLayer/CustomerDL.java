@@ -7,6 +7,7 @@ import pao.Customer.Customer;
 
 public class CustomerDL {
 
+    // placeholder for database service
     private HashMap<String, Customer> customers;
 
     public CustomerDL(){

@@ -19,6 +19,7 @@ public abstract class Customer {
     }
 
     public abstract String getName();
+    public abstract void setName(String name);
 
     public abstract Account createAccount(String accId);
 
