@@ -9,4 +9,16 @@ public class DebitCard extends Card{
     public String getHolderName(){
         return this.account.getOwner().getName();
     }
+
+    public int getAmount(){
+        return this.account.getAmount();
+    }
+
+    public void addAmount(int amount){
+        this.account.addAmount(amount);
+    }
+
+    public void substractAmount(int amount) throws Exception{
+        this.account.subtractAmount(amount);
+    }
 }

@@ -9,4 +9,7 @@ public abstract class Card {
     }
 
     public abstract String getHolderName();
+    public abstract int getAmount();
+    public abstract void addAmount(int amount);
+    public abstract void substractAmount(int amount) throws Exception;
 }
