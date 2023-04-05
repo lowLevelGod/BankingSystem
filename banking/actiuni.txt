@@ -18,3 +18,9 @@
 13. Citire detalii tranzactie
 14. Adaugare tranzactii neefectuate pe client 
 15. Efectuarea tranzactiilor facute de client si stocarea celor reusite
+### Card banca 
+16. Creare card credit
+17. Creare card debit 
+18. Citire detalii card 
+19. Actualizare informatii card 
+20. Stergere card

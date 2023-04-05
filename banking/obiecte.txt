@@ -15,9 +15,15 @@
 10. Withdraw
 11. TransactionService
 12. TransactionDL (interfata pentru baza de date / dictionar in-memory)
+### Card 
+13. CreditCard 
+14. DebitCard 
+15. CardService 
+16. CardDL (interfata pentru baza de date / dictionar in-memory)
 ### Exceptii
-13. AccountException
-14. CustomerException
-15. TransactionException
+17. AccountException
+18. CustomerException
+19. TransactionException
+20. CardException
 ### Utils
-16. Demo
+21. Demo
