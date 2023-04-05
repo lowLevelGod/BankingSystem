@@ -32,6 +32,10 @@ public class Account {
         this.owner = owner;
     }
 
+    public Customer getOwner(){
+        return this.owner;
+    }
+
     public String getId(){
         return this.id;
     }
