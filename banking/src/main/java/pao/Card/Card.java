@@ -1,5 +1,7 @@
 package pao.Card;
 
+import pao.Customer.Customer;
+
 public abstract class Card {
 
     private String id;
@@ -12,7 +14,7 @@ public abstract class Card {
         return this.id;
     }
 
-    public abstract String getHolderName();
+    public abstract Customer getOwner();
     public abstract int getAmount();
     public abstract void addAmount(int amount);
     public abstract void substractAmount(int amount) throws Exception;

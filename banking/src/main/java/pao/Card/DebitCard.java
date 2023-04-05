@@ -1,8 +1,10 @@
 package pao.Card;
 
 import pao.Account.Account;
+import pao.Customer.Customer;
+import pao.Utils.Typeable;
 
-public class DebitCard extends Card{
+public class DebitCard extends Card implements Typeable{
     
     private Account account;
 
@@ -12,8 +14,20 @@ public class DebitCard extends Card{
         this.account = account;
     }
 
-    public String getHolderName(){
-        return this.account.getOwner().getName();
+    public String getType(){
+        return "Debit Card";
+    }
+
+    public String toString(){
+        return this.getType() + " " + "'" + this.account.toString() + "'" + " amount: " + this.getAmount();
+    }
+
+    public Customer getOwner(){
+        return this.account.getOwner();
+    }
+
+    public Account getAccount(){
+        return this.account;
     }
 
     public int getAmount(){

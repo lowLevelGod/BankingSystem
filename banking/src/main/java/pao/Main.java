@@ -19,5 +19,8 @@ public class Main
         
         // demo transaction service
         demo.transaction();
+
+        // demo card service
+        demo.card();
     }
 }

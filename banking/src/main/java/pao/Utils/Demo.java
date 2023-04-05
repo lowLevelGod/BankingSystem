@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import pao.Account.Account;
 import pao.Account.AccountService;
+import pao.Card.Card;
+import pao.Card.CardService;
 import pao.Customer.Customer;
 import pao.Customer.CustomerService;
 import pao.Transaction.Transaction;
@@ -147,5 +149,49 @@ public class Demo {
 
         transactionService.readTransaction(t5.getId());
 
+    }
+
+    public void card(){
+        CustomerService customerService = new CustomerService();
+        Customer c1 = customerService.createNatural("Bill", "Wayne");
+        Customer c2 = customerService.createArtificial("Acme Inc");
+
+        AccountService accountService = new AccountService();
+        Account a2 = accountService.createBaseAccount(c2);
+
+        CardService cardService = new CardService();
+
+        System.out.println("Card service demo...\n");
+
+        System.out.println("Creating demo cards...\n");
+
+        Card credit = cardService.createCredit(c1, 0);
+        Card debit = cardService.createDebit(a2);
+        
+        System.out.println("Created " + credit.toString());
+        System.out.println("Created " + debit.toString());
+
+        System.out.println("Retrieving info about demo cards...\n");
+
+        System.out.println("Retrieved by id " + credit.getId() + " " + customerService.readCustomer(credit.getId()));
+        System.out.println("Retrieved by id " + debit.getId() + " " + customerService.readCustomer(debit.getId()));
+        System.out.print("Failed retrieval -> ");
+        cardService.readCard("4");
+
+        System.out.println("Updating info about demo cards...\n");
+
+        credit.addAmount(100);
+        debit.addAmount(200);
+
+        cardService.updateCard(credit);
+        cardService.updateCard(debit);
+        
+        System.out.println("Updated " + " " + cardService.readCard(credit.getId()));
+        System.out.println("Updated " + " " + cardService.readCard(debit.getId()));
+
+        System.out.println("Deleting demo cards...\n");
+        cardService.deleteCard(credit.getId());
+        System.out.println("Deleted " + " " + credit.toString());
+        cardService.deleteCard(credit.getId());
     }
 }

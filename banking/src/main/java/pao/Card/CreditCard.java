@@ -2,8 +2,9 @@ package pao.Card;
 
 import pao.BankException.CardException;
 import pao.Customer.Customer;
+import pao.Utils.Typeable;
 
-public class CreditCard extends Card{
+public class CreditCard extends Card implements Typeable{
 
     private Customer owner;
     private int amount;
@@ -15,8 +16,16 @@ public class CreditCard extends Card{
         this.amount = amount;
     }
 
-    public String getHolderName(){
-        return this.owner.getName();
+    public String getType(){
+        return "Credit Card";
+    }
+
+    public String toString(){
+        return this.getType() + " " + "'" + this.owner.toString() + "'" + " amount: " + this.getAmount();
+    }
+
+    public Customer getOwner(){
+        return this.owner;
     }
 
     public int getAmount(){

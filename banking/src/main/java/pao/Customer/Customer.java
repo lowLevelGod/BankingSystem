@@ -31,6 +31,10 @@ public abstract class Customer {
         this.id = id;
     }
 
+    public TreeSet<Transaction> getPendingTransactions(){
+        return this.pendingTransactions;
+    }
+
     public void addPendingTransaction(Transaction t) {
         this.pendingTransactions.add(t);
     }
