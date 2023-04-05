@@ -6,6 +6,12 @@ public class DebitCard extends Card{
     
     private Account account;
 
+    public DebitCard(String id, Account account){
+        super(id);
+
+        this.account = account;
+    }
+
     public String getHolderName(){
         return this.account.getOwner().getName();
     }

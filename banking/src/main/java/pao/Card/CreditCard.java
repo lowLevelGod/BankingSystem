@@ -1,14 +1,22 @@
 package pao.Card;
 
 import pao.BankException.CardException;
+import pao.Customer.Customer;
 
 public class CreditCard extends Card{
 
-    private String name;
+    private Customer owner;
     private int amount;
 
+    public CreditCard(String id, Customer owner, int amount){
+        super(id);
+
+        this.owner = owner;
+        this.amount = amount;
+    }
+
     public String getHolderName(){
-        return this.name;
+        return this.owner.getName();
     }
 
     public int getAmount(){
