@@ -9,7 +9,7 @@ import pao.Transaction.Transaction;
 
 public abstract class Customer {
 
-    private String id;
+    private final String id;
     // using TreeSet to keep transactions ordered by date
     private TreeSet<Transaction> pendingTransactions;
 
@@ -19,25 +19,10 @@ public abstract class Customer {
     }
 
     public abstract String getName();
+
     public abstract void setName(String name);
 
     public abstract Account createAccount(String accId);
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public TreeSet<Transaction> getPendingTransactions(){
-        return this.pendingTransactions;
-    }
-
-    public void addPendingTransaction(Transaction t) {
-        this.pendingTransactions.add(t);
-    }
 
     // returns successsful transactions
     // successful transactions are removed from pending list
@@ -60,4 +45,17 @@ public abstract class Customer {
 
         return successful;
     }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public TreeSet<Transaction> getPendingTransactions() {
+        return this.pendingTransactions;
+    }
+
+    public void addPendingTransaction(Transaction t) {
+        this.pendingTransactions.add(t);
+    }
+
 }

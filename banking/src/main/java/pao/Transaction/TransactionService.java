@@ -9,24 +9,22 @@ import pao.Customer.Customer;
 import pao.DataLayer.TransactionDL;
 
 public class TransactionService {
-    
+
     private int id = 1;
     private TransactionDL transactions;
 
-    private int getNextId()
-    {
+    private int getNextId() {
         int id = this.id;
-        this.id += 1; 
+        this.id += 1;
 
         return id;
     }
-
 
     public TransactionService() {
         transactions = new TransactionDL();
     }
 
-    public Withdraw withdraw(Customer customer, Account acc, String details, int amount){
+    public Withdraw withdraw(Customer customer, Account acc, String details, int amount) {
 
         String id = Integer.toString(getNextId());
         Date date = new Date(System.currentTimeMillis() + this.id * 100000);
@@ -36,7 +34,7 @@ public class TransactionService {
         return w;
     }
 
-    public Deposit deposit(Customer customer, Account acc, String details, int amount){
+    public Deposit deposit(Customer customer, Account acc, String details, int amount) {
 
         String id = Integer.toString(getNextId());
         Date date = new Date(System.currentTimeMillis() + this.id * 100000);
@@ -49,7 +47,7 @@ public class TransactionService {
     // transfer is made of one withdrawal from the source account
     // and a deposit into the destination account
     // returns both
-    public Transaction[] transfer(Customer srcCustomer, Account srcAcc, Account destAcc, String details, int amount){
+    public Transaction[] transfer(Customer srcCustomer, Account srcAcc, Account destAcc, String details, int amount) {
 
         String srcId = Integer.toString(getNextId());
         String destId = Integer.toString(getNextId());
@@ -60,14 +58,14 @@ public class TransactionService {
         Withdraw w = new Withdraw(srcId, details, srcDate, amount, srcCustomer, srcAcc);
         Deposit d = new Deposit(destId, details, destDate, amount, srcCustomer, destAcc);
 
-        return new Transaction[] {w, d};
+        return new Transaction[] { w, d };
     }
 
-    public ArrayList<Transaction> storePendingTransactions(Customer customer){
+    public ArrayList<Transaction> storePendingTransactions(Customer customer) {
         return transactions.storePendingTransactions(customer);
     }
 
-    public Transaction readTransaction(String id){
+    public Transaction readTransaction(String id) {
         Transaction transaction = null;
         try {
             transaction = transactions.readTransaction(id);

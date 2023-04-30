@@ -10,7 +10,7 @@ public class CustomerDL {
     // placeholder for database service
     private HashMap<String, Customer> customers;
 
-    public CustomerDL(){
+    public CustomerDL() {
         customers = new HashMap<String, Customer>();
     }
 
@@ -19,32 +19,32 @@ public class CustomerDL {
         String id = customer.getId();
         if (!customers.containsKey(id)) {
             customers.put(id, customer);
-        }else{
+        } else {
             throw new CustomerException("Failed to add new customer. ID " + id + " already exists!");
         }
     }
 
-    public void deleteCustomer(String id) throws CustomerException{
+    public void deleteCustomer(String id) throws CustomerException {
 
-        if (customers.remove(id) == null){
+        if (customers.remove(id) == null) {
             throw new CustomerException("Failed to delete customer. ID " + id + " does not exist!");
         }
     }
 
-    public void updateCustomer(Customer customer) throws CustomerException{
+    public void updateCustomer(Customer customer) throws CustomerException {
 
         String id = customer.getId();
         if (customers.containsKey(id)) {
             customers.put(id, customer);
-        }else{
+        } else {
             throw new CustomerException("Failed to update customer data. ID " + id + " does not exist!");
         }
     }
 
-    public Customer readCustomer(String id) throws CustomerException{
+    public Customer readCustomer(String id) throws CustomerException {
 
         Customer customer = customers.get(id);
-        if (customer == null){
+        if (customer == null) {
             throw new CustomerException("Failed to retrieve customer data. ID " + id + " does not exist!");
         }
 

@@ -60,7 +60,7 @@ public class CardService {
         }
     }
 
-    public void updateCard(Card card){
+    public void updateCard(Card card) {
         try {
             cards.updateCard(card);
         } catch (CardException exception) {
@@ -68,7 +68,7 @@ public class CardService {
         }
     }
 
-    public Card readCard(String id){
+    public Card readCard(String id) {
 
         Card card = null;
         try {

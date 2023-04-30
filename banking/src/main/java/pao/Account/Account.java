@@ -4,7 +4,7 @@ import pao.BankException.AccountException;
 import pao.Customer.Customer;
 
 public class Account {
-    private String id;
+    private final String id;
     private int interest;
     private Customer owner;
     private int amount;
@@ -21,38 +21,43 @@ public class Account {
     }
 
     public void subtractAmount(int amount) throws AccountException {
-        if (this.amount >= amount) {
-            this.amount -= amount;
-        }else{
-            throw new AccountException("Insufficient funds!");
-        }
+        setAmount(this.amount - amount);
     }
 
-    public void setOwner(Customer owner) {
-        this.owner = owner;
+    public String toString() {
+        return "Account" + " " + "owned by " + owner.toString();
     }
 
-    public Customer getOwner(){
-        return this.owner;
-    }
-
-    public String getId(){
+    public String getId() {
         return this.id;
-    }
-
-    public String getOwnerId() {
-        return this.owner.getId();
     }
 
     public int getInterest() {
         return this.interest;
     }
 
+    public void setInterest(int interest) {
+        this.interest = interest;
+    }
+
+    public Customer getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+    }
+
     public int getAmount() {
         return this.amount;
     }
 
-    public String toString(){
-        return "Account" + " " + "owned by " + owner.toString();
+    public void setAmount(int amount) throws AccountException {
+        if (amount >= 0) {
+            this.amount = amount;
+        } else {
+            throw new AccountException("Insufficient funds!");
+        }
     }
+
 }

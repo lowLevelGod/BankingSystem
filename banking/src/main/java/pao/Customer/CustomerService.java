@@ -52,7 +52,7 @@ public class CustomerService {
         }
     }
 
-    public void updateCustomer(Customer customer){
+    public void updateCustomer(Customer customer) {
         try {
             customers.updateCustomer(customer);
         } catch (CustomerException exception) {
@@ -60,7 +60,7 @@ public class CustomerService {
         }
     }
 
-    public Customer readCustomer(String id){
+    public Customer readCustomer(String id) {
 
         Customer customer = null;
         try {
@@ -71,7 +71,6 @@ public class CustomerService {
 
         return customer;
     }
-
 
     private int getNextId() {
         int id = this.id;

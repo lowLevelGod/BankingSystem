@@ -8,19 +8,18 @@ public class AccountService {
     private int id = 1;
     private AccountDL accounts;
 
-    public AccountService(){
+    public AccountService() {
         accounts = new AccountDL();
     }
 
-    public Account createBaseAccount(Customer customer)
-    {
+    public Account createBaseAccount(Customer customer) {
         String id = Integer.toString(getNextId());
 
         Account acc = customer.createAccount(id);
-        
+
         try {
             accounts.createAccount(acc);
-        }catch(AccountException exception){
+        } catch (AccountException exception) {
             System.out.println(exception.getMessage());
 
             return null;
@@ -29,39 +28,38 @@ public class AccountService {
         return acc;
     }
 
-    public void deleteAccount(String id){
+    public void deleteAccount(String id) {
         try {
             accounts.deleteAccount(id);
-        }catch(AccountException exception){
+        } catch (AccountException exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    public void updateAccount(Account account){
-        
+    public void updateAccount(Account account) {
+
         try {
             accounts.updateAccount(account);
-        }catch(AccountException exception){
+        } catch (AccountException exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    public Account readAccount(String id){
+    public Account readAccount(String id) {
 
         Account account = null;
         try {
             account = accounts.readAccount(id);
-        }catch(AccountException exception){
+        } catch (AccountException exception) {
             System.out.println(exception.getMessage());
         }
 
         return account;
     }
 
-    private int getNextId()
-    {
+    private int getNextId() {
         int id = this.id;
-        this.id += 1; 
+        this.id += 1;
 
         return id;
     }
