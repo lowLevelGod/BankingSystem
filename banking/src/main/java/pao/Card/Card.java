@@ -1,8 +1,9 @@
 package pao.Card;
 
 import pao.Customer.Customer;
+import pao.Utils.Typeable;
 
-public abstract class Card {
+public abstract class Card implements Typeable {
 
     private final String id;
 

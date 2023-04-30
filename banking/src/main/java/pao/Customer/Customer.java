@@ -6,8 +6,9 @@ import java.util.TreeSet;
 import pao.Account.Account;
 import pao.BankException.AccountException;
 import pao.Transaction.Transaction;
+import pao.Utils.Typeable;
 
-public abstract class Customer {
+public abstract class Customer implements Typeable  {
 
     private final String id;
     // using TreeSet to keep transactions ordered by date

@@ -1,15 +1,21 @@
 package pao.Customer;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import pao.Account.Account;
 import pao.Account.AccountFactory;
-import pao.Utils.Typeable;
 
-public class Artificial extends Customer implements Typeable {
+public class Artificial extends Customer{
     private String companyName;
 
     public Artificial(String id, String companyName) {
         super(id);
         this.companyName = companyName;
+    }
+
+    public Artificial(String id, ResultSet dbRow) throws SQLException{
+        this(id, dbRow.getString("company_name"));
     }
 
     public String getType() {

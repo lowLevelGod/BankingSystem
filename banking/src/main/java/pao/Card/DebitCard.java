@@ -3,11 +3,10 @@ package pao.Card;
 import pao.Account.Account;
 import pao.BankException.AccountException;
 import pao.Customer.Customer;
-import pao.Utils.Typeable;
 
-public class DebitCard extends Card implements Typeable {
+public class DebitCard extends Card {
 
-    private final Account account;
+    private Account account;
 
     public DebitCard(String id, Account account) {
         super(id);
@@ -29,6 +28,10 @@ public class DebitCard extends Card implements Typeable {
 
     public Account getAccount() {
         return this.account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public int getAmount() {

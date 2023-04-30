@@ -1,20 +1,25 @@
 package pao.Customer;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import pao.Account.Account;
 import pao.Account.AccountFactory;
-import pao.Utils.Typeable;
 
-public class Natural extends Customer implements Typeable {
+public class Natural extends Customer {
 
     private String firstName;
     private String lastName;
-
+    
     public Natural(String id, String firstName, String lastName) {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Natural(String id, ResultSet dbRow) throws SQLException{
+        this(id, dbRow.getString("first_name"), dbRow.getString("last_name"));
     }
 
     public String toString() {

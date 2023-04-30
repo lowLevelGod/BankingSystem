@@ -1,10 +1,12 @@
 package pao.Card;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import pao.BankException.CardException;
 import pao.Customer.Customer;
-import pao.Utils.Typeable;
 
-public class CreditCard extends Card implements Typeable {
+public class CreditCard extends Card {
 
     private final Customer owner;
     private int amount;
@@ -14,6 +16,10 @@ public class CreditCard extends Card implements Typeable {
 
         this.owner = owner;
         this.amount = amount;
+    }
+
+    public CreditCard(String id, Customer owner, ResultSet dbRow) throws SQLException{
+        this(id, owner, dbRow.getInt("amount"));
     }
 
     public String getType() {

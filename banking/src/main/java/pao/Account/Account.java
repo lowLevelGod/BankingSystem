@@ -1,5 +1,8 @@
 package pao.Account;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import pao.BankException.AccountException;
 import pao.Customer.Customer;
 
@@ -14,6 +17,10 @@ public class Account {
         this.interest = interest;
         this.owner = owner;
         this.amount = amount;
+    }
+
+    public Account(String id, Customer owner, ResultSet dbRow) throws SQLException{
+        this(id, dbRow.getInt("interest"), owner, dbRow.getInt("amount"));
     }
 
     public void addAmount(int amount) {

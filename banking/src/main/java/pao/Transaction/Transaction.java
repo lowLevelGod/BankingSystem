@@ -1,12 +1,15 @@
 package pao.Transaction;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import pao.Account.Account;
 import pao.BankException.AccountException;
 import pao.Customer.Customer;
+import pao.Utils.Typeable;
 
-public abstract class Transaction implements Comparable<Transaction> {
+public abstract class Transaction implements Comparable<Transaction>, Typeable {
     private final String id;
     private String details;
     private final Date date;
@@ -25,6 +28,10 @@ public abstract class Transaction implements Comparable<Transaction> {
         this.amount = amount;
         this.customer = customer;
         this.account = account;
+    }
+
+    public Transaction(String id, Customer customer, Account account, ResultSet dbRow) throws SQLException{
+        this(id, dbRow.getString("details"), dbRow.getDate("date"), dbRow.getInt("amount"), customer, account);
     }
 
     public abstract void performTransaction() throws AccountException;

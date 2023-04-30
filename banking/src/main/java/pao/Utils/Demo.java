@@ -1,5 +1,6 @@
 package pao.Utils;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import pao.Account.Account;
@@ -12,17 +13,24 @@ import pao.Transaction.Transaction;
 import pao.Transaction.TransactionService;
 
 public class Demo {
-    public void customer(){
+
+    private final Connection connection;
+
+    public Demo(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void customer() {
 
         System.out.println("Customer service demo...\n");
 
-        CustomerService customerService = new CustomerService();
+        CustomerService customerService = new CustomerService(connection);
 
         System.out.println("Creating demo customers...\n");
         Customer c1 = customerService.createNatural("John", "Doe");
         Customer c2 = customerService.createNatural("Bill", "Wayne");
         Customer c3 = customerService.createArtificial("Acme Inc");
-        
+
         System.out.println("Created " + c1.toString());
         System.out.println("Created " + c2.toString());
         System.out.println("Created " + c3.toString());
@@ -41,7 +49,7 @@ public class Demo {
         c1.setName("Johnny Doe");
         customerService.updateCustomer(c3);
         customerService.updateCustomer(c1);
-        
+
         System.out.println("Updated " + " " + customerService.readCustomer(c1.getId()));
         System.out.println("Updated " + " " + customerService.readCustomer(c3.getId()));
 
@@ -51,15 +59,15 @@ public class Demo {
         customerService.readCustomer(c1.getId());
     }
 
-    public void account(){
+    public void account() {
         System.out.println("Account service demo...\n");
 
-        CustomerService customerService = new CustomerService();
+        CustomerService customerService = new CustomerService(connection);
 
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService();
+        AccountService accountService = new AccountService(connection);
 
         System.out.println("Creating demo accounts...\n");
 
@@ -78,7 +86,7 @@ public class Demo {
 
         a1.setOwner(c2);
         accountService.updateAccount(a1);
-        
+
         System.out.println("Updated " + " " + accountService.readAccount(a1.getId()));
 
         System.out.println("Deleting demo accounts...\n");
@@ -87,17 +95,17 @@ public class Demo {
         accountService.readAccount(a1.getId());
     }
 
-    public void transaction(){
+    public void transaction() {
 
-        CustomerService customerService = new CustomerService();
+        CustomerService customerService = new CustomerService(connection);
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService();
+        AccountService accountService = new AccountService(connection);
         Account a1 = accountService.createBaseAccount(c1);
         Account a2 = accountService.createBaseAccount(c2);
 
-        TransactionService transactionService = new TransactionService();
+        TransactionService transactionService = new TransactionService(connection);
 
         Transaction t1 = transactionService.deposit(c1, a1, "deposit 300", 300);
         Transaction t2 = transactionService.deposit(c2, a2, "deposit 100000", 100000);
@@ -131,11 +139,11 @@ public class Demo {
 
         System.out.println("Storing successful demo transactions...\n");
 
-        for (Transaction t : arr1){
+        for (Transaction t : arr1) {
             System.out.println("Successfully stored " + t.toString());
         }
 
-        for (Transaction t : arr2){
+        for (Transaction t : arr2) {
             System.out.println("Successfully stored " + t.toString());
         }
 
@@ -144,22 +152,24 @@ public class Demo {
         System.out.println("Retrieved by id " + t1.getId() + " " + transactionService.readTransaction(t1.getId()));
         System.out.println("Retrieved by id " + t2.getId() + " " + transactionService.readTransaction(t2.getId()));
         System.out.println("Retrieved by id " + t3.getId() + " " + transactionService.readTransaction(t3.getId()));
-        System.out.println("Retrieved by id " + t4[0].getId() + " " + transactionService.readTransaction(t4[0].getId()));
-        System.out.println("Retrieved by id " + t4[1].getId() + " " + transactionService.readTransaction(t4[1].getId()));
+        System.out
+                .println("Retrieved by id " + t4[0].getId() + " " + transactionService.readTransaction(t4[0].getId()));
+        System.out
+                .println("Retrieved by id " + t4[1].getId() + " " + transactionService.readTransaction(t4[1].getId()));
 
         transactionService.readTransaction(t5.getId());
 
     }
 
-    public void card(){
-        CustomerService customerService = new CustomerService();
+    public void card() {
+        CustomerService customerService = new CustomerService(connection);
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService();
+        AccountService accountService = new AccountService(connection);
         Account a2 = accountService.createBaseAccount(c2);
 
-        CardService cardService = new CardService();
+        CardService cardService = new CardService(connection);
 
         System.out.println("Card service demo...\n");
 
@@ -167,7 +177,7 @@ public class Demo {
 
         Card credit = cardService.createCredit(c1, 0);
         Card debit = cardService.createDebit(a2);
-        
+
         System.out.println("Created " + credit.toString());
         System.out.println("Created " + debit.toString());
 
@@ -185,7 +195,7 @@ public class Demo {
 
         cardService.updateCard(credit);
         cardService.updateCard(debit);
-        
+
         System.out.println("Updated " + " " + cardService.readCard(credit.getId()));
         System.out.println("Updated " + " " + cardService.readCard(debit.getId()));
 
