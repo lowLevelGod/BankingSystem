@@ -27,7 +27,7 @@ public class CreditCard extends Card {
     }
 
     public String toString() {
-        return this.getType() + " " + "'" + this.owner.toString() + "'" + " amount: " + this.getAmount();
+        return super.toString() + this.getType() + " " + "'" + this.owner.toString() + "'" + " amount: " + this.getAmount();
     }
 
     public Customer getOwner() {

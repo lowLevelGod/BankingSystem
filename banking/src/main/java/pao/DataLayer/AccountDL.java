@@ -37,20 +37,26 @@ public class AccountDL {
 
     public void deleteAccount(String id) throws AccountException {
 
+        int res = 0;
         try {
             String query = "DELETE FROM Account WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, id);
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new AccountException("Failed to delete account. ID " + id + " does not exist!");
+        }
+
+        if (res == 0){
             throw new AccountException("Failed to delete account. ID " + id + " does not exist!");
         }
     }
 
     public void updateAccount(Account account) throws AccountException {
 
+        int res = 0;
         try {
             String query = "UPDATE Account SET interest = ?, owner = ?, amount = ? WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -58,10 +64,14 @@ public class AccountDL {
             preparedStmt.setString(2, account.getOwner().getId());
             preparedStmt.setInt(3, account.getAmount());
             preparedStmt.setString(4, account.getId());
-            preparedStmt.executeUpdate();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new AccountException("Failed to update account data. ID " + account.getId() + " does not exist!");
+        }
+
+        if (res == 0){
             throw new AccountException("Failed to update account data. ID " + account.getId() + " does not exist!");
         }
     }

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 import pao.Account.Account;
 import pao.Account.AccountService;
+import pao.BankException.AccountException;
+import pao.BankException.CardException;
+import pao.BankException.CustomerException;
+import pao.BankException.TransactionException;
 import pao.Card.Card;
 import pao.Card.CardService;
 import pao.Customer.Customer;
@@ -20,7 +24,7 @@ public class Demo {
         this.connection = connection;
     }
 
-    public void customer() {
+    public void customer() throws CustomerException {
 
         System.out.println("Customer service demo...\n");
 
@@ -59,7 +63,7 @@ public class Demo {
         customerService.readCustomer(c1.getId());
     }
 
-    public void account() {
+    public void account() throws CustomerException, AccountException {
         System.out.println("Account service demo...\n");
 
         CustomerService customerService = new CustomerService(connection);
@@ -95,7 +99,7 @@ public class Demo {
         accountService.readAccount(a1.getId());
     }
 
-    public void transaction() {
+    public void transaction() throws CustomerException, AccountException, TransactionException {
 
         CustomerService customerService = new CustomerService(connection);
         Customer c1 = customerService.createNatural("Bill", "Wayne");
@@ -161,7 +165,7 @@ public class Demo {
 
     }
 
-    public void card() {
+    public void card() throws CustomerException, CardException, AccountException {
         CustomerService customerService = new CustomerService(connection);
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");

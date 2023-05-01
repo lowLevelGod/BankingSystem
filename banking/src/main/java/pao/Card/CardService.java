@@ -22,62 +22,42 @@ public class CardService {
         cards = new CardDL(connection);
     }
 
-    public CreditCard createCredit(Customer owner, int amount) {
+    public CreditCard createCredit(Customer owner, int amount) throws CardException {
 
         String id = Integer.toString(getNextId());
         CreditCard credit = new CreditCard(id, owner, amount);
 
-        try {
-            cards.createCard(credit);
-        } catch (CardException exception) {
-            System.out.println(exception.getMessage());
-
-            return null;
-        }
+        cards.createCard(credit);
 
         return credit;
     }
 
-    public DebitCard createDebit(Account account) {
+    public DebitCard createDebit(Account account) throws CardException {
 
         String id = Integer.toString(getNextId());
         DebitCard debit = new DebitCard(id, account);
 
-        try {
-            cards.createCard(debit);
-        } catch (CardException exception) {
-            System.out.println(exception.getMessage());
-
-            return null;
-        }
+        cards.createCard(debit);
 
         return debit;
     }
 
-    public void deleteCard(String id) {
-        try {
-            cards.deleteCard(id);
-        } catch (CardException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void deleteCard(String id) throws CardException {
+
+        cards.deleteCard(id);
     }
 
-    public void updateCard(Card card) {
-        try {
-            cards.updateCard(card);
-        } catch (CardException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void updateCard(Card card) throws CardException {
+
+        cards.updateCard(card);
+
     }
 
-    public Card readCard(String id) {
+    public Card readCard(String id) throws CardException {
 
         Card card = null;
-        try {
-            card = cards.readCard(id);
-        } catch (CardException exception) {
-            System.out.println(exception.getMessage());
-        }
+
+        card = cards.readCard(id);
 
         return card;
     }

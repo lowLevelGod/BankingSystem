@@ -62,18 +62,33 @@ public class TransactionService {
         return new Transaction[] { w, d };
     }
 
-    public ArrayList<Transaction> storePendingTransactions(Customer customer) {
+    public ArrayList<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
         return transactions.storePendingTransactions(customer);
     }
 
-    public Transaction readTransaction(String id) {
+    public Transaction readTransaction(String id) throws TransactionException {
         Transaction transaction = null;
-        try {
-            transaction = transactions.readTransaction(id);
-        } catch (TransactionException exception) {
-            System.out.println(exception.getMessage());
-        }
+
+        transaction = transactions.readTransaction(id);
 
         return transaction;
+    }
+
+    public void deleteTransaction(String id) throws TransactionException {
+
+        transactions.deleteTransaction(id);
+
+    }
+
+    public void updateTransaction(Transaction transaction) throws TransactionException {
+
+        transactions.updateTransaction(transaction);
+
+    }
+
+    public void createTransaction(Transaction transaction) throws TransactionException {
+
+        transactions.createTransaction(transaction);
+
     }
 }

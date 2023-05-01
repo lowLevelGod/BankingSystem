@@ -13,7 +13,7 @@ public abstract class Transaction implements Comparable<Transaction>, Typeable {
     private final String id;
     private String details;
     private final Date date;
-    private int amount;
+    private final int amount;
     private final Customer customer;
     private final Account account;
 
@@ -36,6 +36,11 @@ public abstract class Transaction implements Comparable<Transaction>, Typeable {
 
     public abstract void performTransaction() throws AccountException;
 
+    public String toString() {
+        return "ID: " + this.getId() + " " + this.getType() + " " + "made by " + getCustomer().toString() + " to " + getAccount().toString() + "("
+                + getDetails() + '/' + getDate().toString() + ")";
+    }
+
     public String getId() {
         return this.id;
     }
@@ -54,10 +59,6 @@ public abstract class Transaction implements Comparable<Transaction>, Typeable {
 
     public int getAmount() {
         return this.amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public Customer getCustomer() {

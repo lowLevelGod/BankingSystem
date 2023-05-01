@@ -22,10 +22,6 @@ public class Artificial extends Customer{
         return "Artificial customer";
     }
 
-    public String toString() {
-        return this.getType() + " " + "'" + this.getCompanyName() + "'";
-    }
-
     public Account createAccount(String accId) {
         AccountFactory factory = new AccountFactory();
 

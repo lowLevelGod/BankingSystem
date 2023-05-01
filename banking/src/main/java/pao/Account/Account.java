@@ -19,7 +19,7 @@ public class Account {
         this.amount = amount;
     }
 
-    public Account(String id, Customer owner, ResultSet dbRow) throws SQLException{
+    public Account(String id, Customer owner, ResultSet dbRow) throws SQLException {
         this(id, dbRow.getInt("interest"), owner, dbRow.getInt("amount"));
     }
 
@@ -32,7 +32,8 @@ public class Account {
     }
 
     public String toString() {
-        return "Account" + " " + "owned by " + owner.toString();
+        return "ID: " + this.getId() + " " + "Account" + " with " + "interest: " + this.getInterest() + ", amount: "
+                + this.getAmount() + " " + "owned by " + owner.toString();
     }
 
     public String getId() {

@@ -19,7 +19,7 @@ public class DebitCard extends Card {
     }
 
     public String toString() {
-        return this.getType() + " " + "'" + this.account.toString() + "'" + " amount: " + this.getAmount();
+        return super.toString() + this.getType() + " " + "'" + this.account.toString() + "'";
     }
 
     public Customer getOwner() {

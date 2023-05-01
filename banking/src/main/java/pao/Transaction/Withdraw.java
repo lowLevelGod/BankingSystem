@@ -21,11 +21,6 @@ public class Withdraw extends Transaction {
         return "Withdraw Transaction";
     }
 
-    public String toString() {
-        return this.getType() + " " + "made by " + getCustomer().toString() + " to " + getAccount().toString() + "("
-                + getDetails() + '/' + getDate().toString() + ")";
-    }
-
     public void performTransaction() throws AccountException {
         getAccount().subtractAmount(getAmount());
     }

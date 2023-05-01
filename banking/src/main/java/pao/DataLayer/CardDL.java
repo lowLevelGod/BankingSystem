@@ -51,20 +51,26 @@ public class CardDL {
 
     public void deleteCard(String id) throws CardException {
 
+        int res = 0;
         try {
             String query = "DELETE FROM Card WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, id);
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new CardException("Failed to delete card. ID " + id + " does not exist!");
+        }
+
+        if (res == 0) {
             throw new CardException("Failed to delete card. ID " + id + " does not exist!");
         }
     }
 
     public void updateCard(Card card) throws CardException {
 
+        int res = 0;
         try {
 
             PreparedStatement preparedStmt = null;
@@ -79,13 +85,16 @@ public class CardDL {
                 preparedStmt.setInt(1, card.getAmount());
                 preparedStmt.setString(2, card.getId());
             }
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
             throw new CardException("Failed to update card data. ID " + card.getId() + " does not exist!");
         }
 
+        if (res == 0) {
+            throw new CardException("Failed to update card data. ID " + card.getId() + " does not exist!");
+        }
     }
 
     public Card readCard(String id) throws CardException {

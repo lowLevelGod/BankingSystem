@@ -22,10 +22,6 @@ public class Natural extends Customer {
         this(id, dbRow.getString("first_name"), dbRow.getString("last_name"));
     }
 
-    public String toString() {
-        return this.getType() + " " + "'" + this.getName() + "'";
-    }
-
     public Account createAccount(String accId) {
         AccountFactory factory = new AccountFactory();
 

@@ -15,6 +15,10 @@ public abstract class Card implements Typeable {
         return this.id;
     }
 
+    public String toString() {
+        return "ID: " + this.getId() + " ";
+    }
+
     public abstract Customer getOwner();
 
     public abstract int getAmount();

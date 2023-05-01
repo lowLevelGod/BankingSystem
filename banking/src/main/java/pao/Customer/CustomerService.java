@@ -14,63 +14,42 @@ public class CustomerService {
         customers = new CustomerDL(connection);
     }
 
-    public Natural createNatural(String firstName, String lastName) {
+    public Natural createNatural(String firstName, String lastName) throws CustomerException {
 
         String id = Integer.toString(getNextId());
         Natural nat = new Natural(id, firstName, lastName);
-
-        try {
-            customers.createCustomer(nat);
-        } catch (CustomerException exception) {
-            System.out.println(exception.getMessage());
-
-            return null;
-        }
+        
+        customers.createCustomer(nat);
 
         return nat;
     }
 
-    public Artificial createArtificial(String companyName) {
+    public Artificial createArtificial(String companyName) throws CustomerException {
 
         String id = Integer.toString(getNextId());
         Artificial art = new Artificial(id, companyName);
 
-        try {
-            customers.createCustomer(art);
-        } catch (CustomerException exception) {
-            System.out.println(exception.getMessage());
-
-            return null;
-        }
+        customers.createCustomer(art);
 
         return art;
     }
 
-    public void deleteCustomer(String id) {
-        try {
-            customers.deleteCustomer(id);
-        } catch (CustomerException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void deleteCustomer(String id) throws CustomerException {
+        customers.deleteCustomer(id);
     }
 
-    public void updateCustomer(Customer customer) {
-        try {
-            customers.updateCustomer(customer);
-        } catch (CustomerException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void updateCustomer(Customer customer) throws CustomerException {
+
+        customers.updateCustomer(customer);
+
     }
 
-    public Customer readCustomer(String id) {
+    public Customer readCustomer(String id) throws CustomerException {
 
         Customer customer = null;
-        try {
-            customer = customers.readCustomer(id);
-        } catch (CustomerException exception) {
-            System.out.println(exception.getMessage());
-        }
 
+        customer = customers.readCustomer(id);
+   
         return customer;
     }
 

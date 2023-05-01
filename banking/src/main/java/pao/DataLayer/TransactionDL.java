@@ -23,7 +23,7 @@ public class TransactionDL {
         this.connection = connection;
     }
 
-    private void createTransaction(Transaction transaction) throws TransactionException {
+    public void createTransaction(Transaction transaction) throws TransactionException {
         try {
             String query = "INSERT INTO Transaction (id, details, date, amount, customer, account, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -45,14 +45,19 @@ public class TransactionDL {
 
     public void deleteTransaction(String id) throws TransactionException {
 
+        int res = 0;
         try {
             String query = "DELETE FROM Transaction WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, id);
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new TransactionException("Failed to delete transaction. ID " + id + " does not exist!");
+        }
+
+        if (res == 0) {
             throw new TransactionException("Failed to delete transaction. ID " + id + " does not exist!");
         }
     }
@@ -92,32 +97,35 @@ public class TransactionDL {
 
     public void updateTransaction(Transaction transaction) throws TransactionException {
 
+        int res = 0;
         try {
-            String query = "UPDATE Transaction SET details = ?, amount = ? WHERE id = ?";
+            String query = "UPDATE Transaction SET details = ? WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, transaction.getDetails());
-            preparedStmt.setInt(2, transaction.getAmount());
-            preparedStmt.setString(3, transaction.getId());
-            preparedStmt.executeUpdate();
+            preparedStmt.setString(2, transaction.getId());
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
             throw new TransactionException(
                     "Failed to update transaction data. ID " + transaction.getId() + " does not exist!");
         }
+
+        if (res == 0) {
+            throw new TransactionException(
+                    "Failed to update transaction data. ID " + transaction.getId() + " does not exist!");
+        }
     }
 
     // only successful transactions will be stored
-    public ArrayList<Transaction> storePendingTransactions(Customer customer) {
+    public ArrayList<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
 
         ArrayList<Transaction> res = new ArrayList<Transaction>();
         for (Transaction t : customer.performPendingTransactions()) {
-            try {
-                this.createTransaction(t);
-                res.add(t);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+
+            this.createTransaction(t);
+            res.add(t);
+
         }
         return res;
     }

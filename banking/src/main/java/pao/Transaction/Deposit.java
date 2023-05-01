@@ -22,11 +22,6 @@ public class Deposit extends Transaction {
         return "Deposit Transaction";
     }
 
-    public String toString() {
-        return this.getType() + " " + "made by " + getCustomer().toString() + " to " + getAccount().toString() + "("
-                + getDetails() + '/' + getDate().toString() + ")";
-    }
-
     public void performTransaction() throws AccountException {
         getAccount().addAmount(getAmount());
     }

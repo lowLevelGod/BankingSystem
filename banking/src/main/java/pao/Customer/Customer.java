@@ -47,6 +47,10 @@ public abstract class Customer implements Typeable  {
         return successful;
     }
 
+    public String toString() {
+        return "ID: " + this.getId() + " " + this.getType() + " " + "'" + this.getName() + "'";
+    }
+
     public String getId() {
         return this.id;
     }

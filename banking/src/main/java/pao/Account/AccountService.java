@@ -14,47 +14,30 @@ public class AccountService {
         accounts = new AccountDL(connection);
     }
 
-    public Account createBaseAccount(Customer customer) {
+    public Account createBaseAccount(Customer customer) throws AccountException {
         String id = Integer.toString(getNextId());
 
         Account acc = customer.createAccount(id);
 
-        try {
-            accounts.createAccount(acc);
-        } catch (AccountException exception) {
-            System.out.println(exception.getMessage());
-
-            return null;
-        }
+        accounts.createAccount(acc);
 
         return acc;
     }
 
-    public void deleteAccount(String id) {
-        try {
-            accounts.deleteAccount(id);
-        } catch (AccountException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void deleteAccount(String id) throws AccountException {
+        accounts.deleteAccount(id);
     }
 
-    public void updateAccount(Account account) {
+    public void updateAccount(Account account) throws AccountException {
 
-        try {
-            accounts.updateAccount(account);
-        } catch (AccountException exception) {
-            System.out.println(exception.getMessage());
-        }
+        accounts.updateAccount(account);
     }
 
-    public Account readAccount(String id) {
+    public Account readAccount(String id) throws AccountException {
 
         Account account = null;
-        try {
-            account = accounts.readAccount(id);
-        } catch (AccountException exception) {
-            System.out.println(exception.getMessage());
-        }
+
+        account = accounts.readAccount(id);
 
         return account;
     }

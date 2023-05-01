@@ -55,20 +55,26 @@ public class CustomerDL {
 
     public void deleteCustomer(String id) throws CustomerException {
 
+        int res = 0;
         try {
             String query = "DELETE FROM Customer WHERE id = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, id);
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new CustomerException("Failed to delete customer. ID " + id + " does not exist!");
+        }
+
+        if (res == 0) {
             throw new CustomerException("Failed to delete customer. ID " + id + " does not exist!");
         }
     }
 
     public void updateCustomer(Customer customer) throws CustomerException {
 
+        int res = 0;
         try {
             PreparedStatement preparedStmt = null;
             if (customer.getType().equals("Natural customer")) {
@@ -89,10 +95,14 @@ public class CustomerDL {
                 preparedStmt.setString(1, customer.getName());
                 preparedStmt.setString(2, customer.getId());
             }
-            preparedStmt.execute();
+            res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
             System.out.println(e.toString());
+            throw new CustomerException("Failed to update customer data. ID " + customer.getId() + " does not exist!");
+        }
+
+        if (res == 0) {
             throw new CustomerException("Failed to update customer data. ID " + customer.getId() + " does not exist!");
         }
     }
@@ -109,9 +119,9 @@ public class CustomerDL {
             ResultSet result = preparedStmt.executeQuery();
             result.next();
 
-            if (result.getString("type").equals("Natural customer")){
+            if (result.getString("type").equals("Natural customer")) {
                 customer = new Natural(id, result);
-            }else{
+            } else {
                 customer = new Artificial(id, result);
             }
             preparedStmt.close();
