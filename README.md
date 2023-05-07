@@ -7,6 +7,25 @@
 3. Transaction[] in SystemFacade.java, TransactionService.java
 4. (Sortata) TreeSet< Transaction > in Customer.java
 
+## Servicii scriere / citire baza de date (Data Layer)
+
+1. AccountDL
+2. CardDL
+3. CustomerDL
+4. TransactionDL
+
+## Servicii operatii sistem
+
+1. AccountService
+2. CardService
+3. CustomerService
+4. TransactionService
+
+## Interfata Utilizator
+
+1. Main
+2. SystemFacade
+
 ## Actiuni
 
 ### Cont banca
