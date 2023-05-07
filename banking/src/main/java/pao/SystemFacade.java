@@ -1,6 +1,8 @@
 package pao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import pao.Account.Account;
@@ -25,6 +27,8 @@ public class SystemFacade {
     private final CardService cardService;
     private final AccountService accountService;
     private final TransactionService transactionService;
+
+    private final HashMap<String, Customer> sessionCustomers = new HashMap<String, Customer>();
 
     public SystemFacade(Connection connection) {
         customerService = new CustomerService(connection);
@@ -67,7 +71,7 @@ public class SystemFacade {
         String id = in.nextLine().strip();
 
         Customer c = null;
-        if (type.toLowerCase().equals("natural")){
+        if (type.toLowerCase().equals("natural")) {
             System.out.println("First name: ");
             String firstName = in.nextLine().strip();
             System.out.println("Last name: ");
@@ -75,7 +79,7 @@ public class SystemFacade {
 
             c = new Natural(id, firstName, lastName);
 
-        }else{
+        } else {
             System.out.println("Company name: ");
             String name = in.nextLine().strip();
 
@@ -85,7 +89,7 @@ public class SystemFacade {
         customerService.updateCustomer(c);
         System.out.println(c.toString());
     }
-    
+
     public void deleteCustomer(Scanner in) throws CustomerException {
         System.out.println("Customer ID: ");
         String id = in.nextLine().strip();
@@ -189,7 +193,7 @@ public class SystemFacade {
         String id = in.nextLine().strip();
 
         Card c = null;
-        if (type.toLowerCase().equals("debit")){
+        if (type.toLowerCase().equals("debit")) {
             System.out.println("Account ID: ");
             String accountId = in.nextLine().strip();
 
@@ -197,7 +201,7 @@ public class SystemFacade {
 
             c = new DebitCard(id, account);
 
-        }else{
+        } else {
             System.out.println("Amount: ");
             int amount = Integer.parseInt(in.nextLine().strip());
 
@@ -270,16 +274,20 @@ public class SystemFacade {
         System.out.println("Account ID: ");
         String accountId = in.nextLine().strip();
 
+        Customer customer = null;
+        if (sessionCustomers.containsKey(ownerId)) {
+            customer = sessionCustomers.get(ownerId);
+        } else {
 
-        Customer customer = customerService.readCustomer(ownerId);
+            customer = customerService.readCustomer(ownerId);
+            sessionCustomers.put(ownerId, customer);
+        }
+
         Account account = accountService.readAccount(accountId);
-        
+
         Transaction t = transactionService.deposit(customer, account, details, amount);
 
-        account.addAmount(amount);
-        accountService.updateAccount(account);
-
-        transactionService.createTransaction(t);
+        customer.addPendingTransaction(t);
 
         System.out.println(t.toString());
 
@@ -299,16 +307,20 @@ public class SystemFacade {
         System.out.println("Account ID: ");
         String accountId = in.nextLine().strip();
 
+        Customer customer = null;
+        if (sessionCustomers.containsKey(ownerId)) {
+            customer = sessionCustomers.get(ownerId);
+        } else {
 
-        Customer customer = customerService.readCustomer(ownerId);
+            customer = customerService.readCustomer(ownerId);
+            sessionCustomers.put(ownerId, customer);
+        }
+
         Account account = accountService.readAccount(accountId);
-        
+
         Transaction t = transactionService.withdraw(customer, account, details, amount);
 
-        account.subtractAmount(amount);
-        accountService.updateAccount(account);
-
-        transactionService.createTransaction(t);
+        customer.addPendingTransaction(t);
 
         System.out.println(t.toString());
 
@@ -331,22 +343,50 @@ public class SystemFacade {
         System.out.println("Destination Account ID: ");
         String dstAccountId = in.nextLine().strip();
 
-        Customer customer = customerService.readCustomer(ownerId);
+        Customer customer = null;
+        if (sessionCustomers.containsKey(ownerId)) {
+            customer = sessionCustomers.get(ownerId);
+        } else {
+
+            customer = customerService.readCustomer(ownerId);
+            sessionCustomers.put(ownerId, customer);
+        }
+
         Account srcAccount = accountService.readAccount(srcAccountId);
         Account dstAccount = accountService.readAccount(dstAccountId);
-        
-        Transaction[] t = transactionService.transfer(customer, srcAccount, dstAccount, details, amount);
-    
-        srcAccount.subtractAmount(amount);
-        accountService.updateAccount(srcAccount);
-        dstAccount.addAmount(amount);
-        accountService.updateAccount(dstAccount);
 
-        transactionService.createTransaction(t[0]);
-        transactionService.createTransaction(t[1]);
+        Transaction[] t = transactionService.transfer(customer, srcAccount, dstAccount, details, amount);
+
+        customer.addPendingTransaction(t[0]);
+        customer.addPendingTransaction(t[1]);
 
         System.out.println(t[0].toString());
         System.out.println(t[1].toString());
+    }
+
+    // only store successful transactions
+    public void storePendingTransactions(Scanner in) throws CustomerException, AccountException, TransactionException{
+        System.out.println("Customer ID: ");
+        String ownerId = in.nextLine().strip();
+
+        Customer customer = null;
+        if (sessionCustomers.containsKey(ownerId)) {
+            customer = sessionCustomers.get(ownerId);
+        } else {
+
+            customer = customerService.readCustomer(ownerId);
+            sessionCustomers.put(ownerId, customer);
+        }
+
+        ArrayList<Transaction> successful = customer.performPendingTransactions();
+
+        System.out.println("Successful transactions below");
+
+        for (Transaction t : successful){
+            accountService.updateAccount(t.getAccount());
+            transactionService.createTransaction(t);
+            System.out.println(t.toString());
+        }
     }
 
 }

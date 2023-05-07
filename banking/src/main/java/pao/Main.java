@@ -16,7 +16,7 @@ public class Main {
             "update_customer", "delete_customer", "create_base_account", "read_account", "update_account",
             "delete_account", "create_credit_card", "create_debit_card", "read_card", "update_card", "delete_card",
             "create_deposit_transaction", "create_withdraw_transaction", "create_transfer_transaction",
-            "read_transaction", "update_transaction", "delete_transaction");
+            "read_transaction", "update_transaction", "delete_transaction", "store_pending_transactions");
 
     public static Connection getConnection() {
         try {
@@ -78,6 +78,7 @@ public class Main {
                     case "read_transaction" -> systemFacade.readTransaction(in);
                     case "update_transaction" -> systemFacade.updateTransaction(in);
                     case "delete_transaction" -> systemFacade.deleteTransaction(in);
+                    case "store_pending_transactions" -> systemFacade.storePendingTransactions(in);
                     case "help" -> System.out.println(commands.toString());
                     case "end" -> end = true;
                 }

@@ -1,2 +1,11 @@
-read_customer,2023-05-01 17:17:30.613
-read_card,2023-05-01 17:17:36.778
+read_customer,2023-05-07 19:11:51.041
+read_account,2023-05-07 19:12:04.642
+read_account,2023-05-07 19:12:08.83
+create_deposit_transaction,2023-05-07 19:12:43.675
+store_pending_transactions,2023-05-07 19:20:10.177
+read_transaction,2023-05-07 19:20:27.945
+create_transfer_transaction,2023-05-07 19:21:43.089
+create_deposit_transaction,2023-05-07 19:22:49.447
+store_pending_transactions,2023-05-07 19:23:02.686
+create_withdraw_transaction,2023-05-07 19:23:42.558
+store_pending_transactions,2023-05-07 19:23:53.701
