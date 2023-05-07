@@ -1,31 +1,37 @@
 # BankingSystem
 
+## Colectii utilizate 
+
+1. HashMap<String, Customer>, ArrayList<Transaction>, Transaction[] in SystemFacade.java
+2. TreeSet<Transaction> (Sortata) in Customer.java
+
 ## Actiuni
 
 ### Cont banca
-1. Creare cont nou
-2. Stergere cont 
-3. Actualizare informatii cont 
-4. Citire informatii cont 
+1. Creare cont nou -> create_base_account
+2. Stergere cont -> delete_account
+3. Actualizare informatii cont -> update_account
+4. Citire informatii cont -> read_account
 ### Client banca
-5. Creare client persoana fizica
-6. Creare client persoana juridica 
-7. Stergere client 
-8. Actualizare informatii client 
-9. Citire informatii client 
-### Tranzactii banca
-10. Depozitare bani in cont 
-11. Extragere bani din cont 
-12. Transfer intre conturi
-13. Citire detalii tranzactie
-14. Adaugare tranzactii neefectuate pe client 
-15. Efectuarea tranzactiilor facute de client si stocarea celor reusite
+5. Creare client persoana fizica -> create_natural_customer
+6. Creare client persoana juridica -> create_artificial_customer
+7. Stergere client -> delete_customer
+8. Actualizare informatii client -> update_customer
+9. Citire informatii client -> read_customer
+### Tranzactii banca 
+10. Depozitare bani in cont -> create_deposit_transaction
+11. Extragere bani din cont -> create_withdraw_transaction
+12. Transfer intre conturi -> create_transfer_transaction
+13. Citire detalii tranzactie -> read_transaction
+14. Adaugare tranzactii neefectuate pe client -> create_***_transaction
+15. Efectuarea tranzactiilor facute de client si stocarea celor reusite -> store_pending_transactions
+16. Stergere tranzactie -> delete_transaction
 ### Card banca 
-16. Creare card credit
-17. Creare card debit 
-18. Citire detalii card 
-19. Actualizare informatii card 
-20. Stergere card
+17. Creare card credit -> create_credit_card
+18. Creare card debit -> create_debit_card
+19. Citire detalii card -> read_card
+20. Actualizare informatii card -> update_card
+21. Stergere card-> delete_card
 
 ## Obiecte
 
