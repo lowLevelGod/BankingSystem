@@ -2,8 +2,8 @@
 
 ## Colectii utilizate 
 
-1. HashMap<String, Customer>, ArrayList<Transaction>, Transaction[] in SystemFacade.java
-2. TreeSet<Transaction> (Sortata) in Customer.java
+1. HashMap< String, Customer >, ArrayList< Transaction >, Transaction[] in SystemFacade.java
+2. (Sortata) TreeSet< Transaction > in Customer.java
 
 ## Actiuni
 
