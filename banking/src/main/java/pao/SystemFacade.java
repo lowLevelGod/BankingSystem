@@ -1,9 +1,19 @@
 package pao;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import pao.Account.Account;
 import pao.Account.AccountService;
@@ -37,356 +47,1602 @@ public class SystemFacade {
         transactionService = new TransactionService(connection);
     }
 
-    public void createNaturalCustomer(Scanner in) throws CustomerException {
-        System.out.println("First name: ");
-        String firstName = in.nextLine().strip();
-        System.out.println("Last name: ");
-        String lastName = in.nextLine().strip();
+    public void createNaturalCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CustomerException {
 
-        Customer c = customerService.createNatural(firstName, lastName);
-        System.out.println(c.toString());
-    }
+        JTextField firstNameTextField = new JTextField();
+        firstNameTextField.setColumns(50);
 
-    public void createArtificialCustomer(Scanner in) throws CustomerException {
-        System.out.println("Company name: ");
-        String name = in.nextLine().strip();
+        JTextField lastNameTextField = new JTextField();
+        lastNameTextField.setColumns(50);
 
-        Customer c = customerService.createArtificial(name);
-        System.out.println(c.toString());
-    }
+        JButton button = new JButton("SUBMIT");
 
-    public void readCustomer(Scanner in) throws CustomerException {
-        System.out.println("Customer ID: ");
-        String id = in.nextLine().strip();
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
 
-        Customer c = customerService.readCustomer(id);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String firstName = firstNameTextField.getText();
+                String lastName = lastNameTextField.getText();
 
-        System.out.println(c.toString());
-    }
+                Customer c;
+                String text = null;
+                try {
+                    c = customerService.createNatural(firstName, lastName);
+                    text = "Succesful: " + c.toString() + "\n";
+                    // System.out.println(c.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
 
-    public void updateCustomer(Scanner in) throws CustomerException {
-        System.out.println("Customer type: ");
-        String type = in.nextLine().strip();
-        System.out.println("Customer ID: ");
-        String id = in.nextLine().strip();
+                messageTextField.setText(text);
 
-        Customer c = null;
-        if (type.toLowerCase().equals("natural")) {
-            System.out.println("First name: ");
-            String firstName = in.nextLine().strip();
-            System.out.println("Last name: ");
-            String lastName = in.nextLine().strip();
+                frame.getContentPane().remove(panel);
 
-            c = new Natural(id, firstName, lastName);
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
 
-        } else {
-            System.out.println("Company name: ");
-            String name = in.nextLine().strip();
+        JLabel firstNameLabel = new JLabel("First name: ");
+        JLabel lastNameLabel = new JLabel("Last name: ");
 
-            c = new Artificial(id, name);
-        }
+        JPanel firstNamePanel = new JPanel();
 
-        customerService.updateCustomer(c);
-        System.out.println(c.toString());
-    }
+        firstNamePanel.add(firstNameLabel);
+        firstNamePanel.add(firstNameTextField);
 
-    public void deleteCustomer(Scanner in) throws CustomerException {
-        System.out.println("Customer ID: ");
-        String id = in.nextLine().strip();
+        JPanel lastNamePanel = new JPanel();
 
-        customerService.deleteCustomer(id);
+        lastNamePanel.add(lastNameLabel);
+        lastNamePanel.add(lastNameTextField);
 
-        System.out.println("Deleted!");
-    }
+        panel.add(firstNamePanel);
+        panel.add(lastNamePanel);
 
-    public void createBaseAccount(Scanner in) throws AccountException, CustomerException {
-        System.out.println("Owner ID: ");
-        String id = in.nextLine().strip();
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
 
-        Customer c = customerService.readCustomer(id);
+        panel.add(buttonPanel);
 
-        Account a = accountService.createBaseAccount(c);
-        System.out.println(a.toString());
-    }
-
-    public void deleteAccount(Scanner in) throws AccountException {
-        System.out.println("Account ID: ");
-        String id = in.nextLine().strip();
-
-        accountService.deleteAccount(id);
-        System.out.println("Deleted");
-    }
-
-    public void updateAccount(Scanner in) throws AccountException, CustomerException {
-
-        System.out.println("Account ID: ");
-        String id = in.nextLine().strip();
-
-        System.out.println("Interest: ");
-        int interest = Integer.parseInt(in.nextLine().strip());
-
-        System.out.println("Owner ID: ");
-        String ownerId = in.nextLine().strip();
-
-        System.out.println("Amount: ");
-        int amount = Integer.parseInt(in.nextLine().strip());
-
-        Customer c = customerService.readCustomer(ownerId);
-
-        Account a = new Account(id, interest, c, amount);
-
-        accountService.updateAccount(a);
-        System.out.println(a.toString());
-    }
-
-    public void readAccount(Scanner in) throws AccountException {
-
-        System.out.println("Account ID: ");
-        String id = in.nextLine().strip();
-
-        Account a = accountService.readAccount(id);
-
-        System.out.println(a.toString());
-    }
-
-    public void createCreditCard(Scanner in) throws CardException, CustomerException {
-
-        System.out.println("Owner ID: ");
-        String id = in.nextLine().strip();
-
-        System.out.println("Amount: ");
-        int amount = Integer.parseInt(in.nextLine().strip());
-
-        Customer owner = customerService.readCustomer(id);
-
-        Card card = cardService.createCredit(owner, amount);
-
-        System.out.println(card.toString());
-    }
-
-    public void createDebitCard(Scanner in) throws CardException, AccountException {
-
-        System.out.println("Account ID: ");
-        String id = in.nextLine().strip();
-
-        Account account = accountService.readAccount(id);
-
-        Card card = cardService.createDebit(account);
-
-        System.out.println(card.toString());
-    }
-
-    public void deleteCard(Scanner in) throws CardException {
-
-        System.out.println("Card ID: ");
-        String id = in.nextLine().strip();
-
-        cardService.deleteCard(id);
-        System.out.println("Deleted");
-    }
-
-    public void updateCard(Scanner in) throws CardException, AccountException {
-
-        System.out.println("Card type: ");
-        String type = in.nextLine().strip();
-        System.out.println("Card ID: ");
-        String id = in.nextLine().strip();
-
-        Card c = null;
-        if (type.toLowerCase().equals("debit")) {
-            System.out.println("Account ID: ");
-            String accountId = in.nextLine().strip();
-
-            Account account = accountService.readAccount(accountId);
-
-            c = new DebitCard(id, account);
-
-        } else {
-            System.out.println("Amount: ");
-            int amount = Integer.parseInt(in.nextLine().strip());
-
-            Card oldCard = cardService.readCard(id);
-
-            c = new CreditCard(id, oldCard.getOwner(), amount);
-        }
-
-        cardService.updateCard(c);
-        System.out.println(c.toString());
+        frame.revalidate();
+        frame.repaint();
 
     }
 
-    public void readCard(Scanner in) throws CardException {
+    public void createArtificialCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CustomerException {
 
-        System.out.println("Card ID: ");
-        String id = in.nextLine().strip();
+        JTextField nameTextField = new JTextField();
+        nameTextField.setColumns(50);
 
-        Card c = cardService.readCard(id);
+        JButton button = new JButton("SUBMIT");
 
-        System.out.println(c.toString());
-    }
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
 
-    public void readTransaction(Scanner in) throws TransactionException {
-        System.out.println("Transaction ID: ");
-        String id = in.nextLine().strip();
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = nameTextField.getText();
 
-        Transaction t = transactionService.readTransaction(id);
+                String text = null;
+                Customer c;
+                try {
+                    c = customerService.createArtificial(name);
+                    text = "Succesful: " + c.toString() + "\n";
+                    // System.out.println(c.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
 
-        System.out.println(t.toString());
-    }
+                messageTextField.setText(text);
 
-    public void deleteTransaction(Scanner in) throws TransactionException {
+                frame.getContentPane().remove(panel);
 
-        System.out.println("Transaction ID: ");
-        String id = in.nextLine().strip();
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
 
-        transactionService.deleteTransaction(id);
-        System.out.println("Deleted");
+        JLabel nameLabel = new JLabel("Company name: ");
 
-    }
+        JPanel namePanel = new JPanel();
 
-    public void updateTransaction(Scanner in) throws TransactionException {
+        namePanel.add(nameLabel);
+        namePanel.add(nameTextField);
 
-        System.out.println("Transaction ID: ");
-        String id = in.nextLine().strip();
+        panel.add(namePanel);
 
-        System.out.println("Details: ");
-        String details = in.nextLine().strip();
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
 
-        Transaction t = transactionService.readTransaction(id);
-        t.setDetails(details);
+        panel.add(buttonPanel);
 
-        transactionService.updateTransaction(t);
-
-        System.out.println(t.toString());
-    }
-
-    public void createTransactionDeposit(Scanner in) throws TransactionException, CustomerException, AccountException {
-
-        System.out.println("Details: ");
-        String details = in.nextLine().strip();
-
-        System.out.println("Amount: ");
-        int amount = Integer.parseInt(in.nextLine().strip());
-
-        System.out.println("Customer ID: ");
-        String ownerId = in.nextLine().strip();
-
-        System.out.println("Account ID: ");
-        String accountId = in.nextLine().strip();
-
-        Customer customer = null;
-        if (sessionCustomers.containsKey(ownerId)) {
-            customer = sessionCustomers.get(ownerId);
-        } else {
-
-            customer = customerService.readCustomer(ownerId);
-            sessionCustomers.put(ownerId, customer);
-        }
-
-        Account account = accountService.readAccount(accountId);
-
-        Transaction t = transactionService.deposit(customer, account, details, amount);
-
-        customer.addPendingTransaction(t);
-
-        System.out.println(t.toString());
+        frame.revalidate();
+        frame.repaint();
 
     }
 
-    public void createTransactionWithDraw(Scanner in) throws TransactionException, CustomerException, AccountException {
+    public void readCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws CustomerException {
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
 
-        System.out.println("Details: ");
-        String details = in.nextLine().strip();
+        JButton button = new JButton("SUBMIT");
 
-        System.out.println("Amount: ");
-        int amount = Integer.parseInt(in.nextLine().strip());
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
 
-        System.out.println("Customer ID: ");
-        String ownerId = in.nextLine().strip();
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
 
-        System.out.println("Account ID: ");
-        String accountId = in.nextLine().strip();
+                String text = null;
+                Customer c;
+                try {
+                    c = customerService.readCustomer(id);
+                    text = "Succesful: " + c.toString() + "\n";
+                    // System.out.println(c.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
 
-        Customer customer = null;
-        if (sessionCustomers.containsKey(ownerId)) {
-            customer = sessionCustomers.get(ownerId);
-        } else {
+                messageTextField.setText(text);
 
-            customer = customerService.readCustomer(ownerId);
-            sessionCustomers.put(ownerId, customer);
-        }
+                frame.getContentPane().remove(panel);
 
-        Account account = accountService.readAccount(accountId);
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
 
-        Transaction t = transactionService.withdraw(customer, account, details, amount);
+        JLabel idLabel = new JLabel("Customer ID: ");
 
-        customer.addPendingTransaction(t);
+        JPanel idPanel = new JPanel();
 
-        System.out.println(t.toString());
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void updateCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws CustomerException {
+
+        JComboBox<String> typeList = new JComboBox<String>(new String[] { "natural", "artificial" });
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        panel.add(typeList);
+
+        JPanel panelForms = new JPanel();
+        panelForms.setLayout(new BoxLayout(panelForms, BoxLayout.Y_AXIS));
+
+        panel.add(panelForms);
+
+        typeList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                String type = (String) cb.getSelectedItem();
+
+                JLabel idLabel = new JLabel("Customer ID: ");
+                JTextField idTextField = new JTextField();
+                idTextField.setColumns(50);
+                JPanel idPanel = new JPanel();
+                idPanel.add(idLabel);
+                idPanel.add(idTextField);
+
+                if (type.toLowerCase().equals("natural")) {
+                    JLabel firstNameLabel = new JLabel("First name: ");
+                    JTextField firstNameTextField = new JTextField();
+                    firstNameTextField.setColumns(50);
+                    JPanel firstNamePanel = new JPanel();
+                    firstNamePanel.add(firstNameLabel);
+                    firstNamePanel.add(firstNameTextField);
+
+                    JLabel lastNameLabel = new JLabel("Last name: ");
+                    JTextField lastNameTextField = new JTextField();
+                    lastNameTextField.setColumns(50);
+                    JPanel lastNamePanel = new JPanel();
+                    lastNamePanel.add(lastNameLabel);
+                    lastNamePanel.add(lastNameTextField);
+
+                    JButton button = new JButton("SUBMIT");
+
+                    button.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            String id = idTextField.getText().strip();
+                            String firstName = firstNameTextField.getText().strip();
+                            String lastName = lastNameTextField.getText().strip();
+
+                            String text = null;
+                            Customer c = new Natural(id, firstName, lastName);
+                            try {
+                                customerService.updateCustomer(c);
+                                text = "Succesful: " + c.toString() + "\n";
+                                // System.out.println(c.toString());
+                            } catch (Exception exception) {
+                                text = "Error: " + exception.getMessage() + "\n";
+                                // System.out.println(exception.getMessage());
+                            }
+
+                            messageTextField.setText(text);
+
+                            frame.getContentPane().remove(panel);
+
+                            frame.getContentPane().add(mainPanel);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    });
+
+                    panelForms.removeAll();
+
+                    panelForms.add(idPanel);
+                    panelForms.add(firstNamePanel);
+                    panelForms.add(lastNamePanel);
+                    panelForms.add(button);
+
+                    panelForms.revalidate();
+                    panelForms.repaint();
+
+                    frame.revalidate();
+                    frame.repaint();
+                } else {
+                    JLabel nameLabel = new JLabel("Company name: ");
+                    JTextField nameTextField = new JTextField();
+                    nameTextField.setColumns(50);
+                    JPanel namePanel = new JPanel();
+                    namePanel.add(nameLabel);
+                    namePanel.add(nameTextField);
+
+                    JButton button = new JButton("SUBMIT");
+
+                    button.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            String id = idTextField.getText().strip();
+                            String name = nameTextField.getText().strip();
+
+                            String text = null;
+                            Customer c = new Artificial(id, name);
+                            try {
+                                customerService.updateCustomer(c);
+                                text = "Succesful: " + c.toString() + "\n";
+                                // System.out.println(c.toString());
+                            } catch (Exception exception) {
+                                text = "Error: " + exception.getMessage() + "\n";
+                                // System.out.println(exception.getMessage());
+                            }
+
+                            messageTextField.setText(text);
+
+                            frame.getContentPane().remove(panel);
+
+                            frame.getContentPane().add(mainPanel);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    });
+
+                    panelForms.removeAll();
+
+                    panelForms.add(idPanel);
+                    panelForms.add(namePanel);
+                    panelForms.add(button);
+
+                    panelForms.revalidate();
+                    panelForms.repaint();
+
+                    frame.revalidate();
+                    frame.repaint();
+                }
+            }
+        });
+
+        typeList.setSelectedItem("natural");
+
+        frame.revalidate();
+        frame.repaint();
 
     }
 
-    public void createTransactionTransfer(Scanner in) throws TransactionException, CustomerException, AccountException {
+    public void deleteCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws CustomerException {
 
-        System.out.println("Details: ");
-        String details = in.nextLine().strip();
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
 
-        System.out.println("Amount: ");
-        int amount = Integer.parseInt(in.nextLine().strip());
+        JButton button = new JButton("SUBMIT");
 
-        System.out.println("Customer ID: ");
-        String ownerId = in.nextLine().strip();
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
 
-        System.out.println("Source Account ID: ");
-        String srcAccountId = in.nextLine().strip();
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
 
-        System.out.println("Destination Account ID: ");
-        String dstAccountId = in.nextLine().strip();
+                String text = null;
+                try {
+                    customerService.deleteCustomer(id);
 
-        Customer customer = null;
-        if (sessionCustomers.containsKey(ownerId)) {
-            customer = sessionCustomers.get(ownerId);
-        } else {
+                    text = "Succesful: " + "Deleted" + "\n";
+                    // System.out.println(c.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
 
-            customer = customerService.readCustomer(ownerId);
-            sessionCustomers.put(ownerId, customer);
-        }
+                messageTextField.setText(text);
 
-        Account srcAccount = accountService.readAccount(srcAccountId);
-        Account dstAccount = accountService.readAccount(dstAccountId);
+                frame.getContentPane().remove(panel);
 
-        Transaction[] t = transactionService.transfer(customer, srcAccount, dstAccount, details, amount);
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
 
-        customer.addPendingTransaction(t[0]);
-        customer.addPendingTransaction(t[1]);
+        JLabel idLabel = new JLabel("Customer ID: ");
 
-        System.out.println(t[0].toString());
-        System.out.println(t[1].toString());
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void createBaseAccount(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws AccountException, CustomerException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+                    Customer c = customerService.readCustomer(id);
+
+                    Account a = accountService.createBaseAccount(c);
+                    text = "Succesful: " + a.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Owner ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void deleteAccount(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws AccountException {
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+                    accountService.deleteAccount(id);
+
+                    text = "Succesful: " + "Deleted" + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Account ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void updateAccount(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws AccountException, CustomerException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JTextField interestTextField = new JTextField();
+        interestTextField.setColumns(50);
+
+        JTextField ownerTextField = new JTextField();
+        ownerTextField.setColumns(50);
+
+        JTextField amountTextField = new JTextField();
+        amountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+                int interest = Integer.parseInt(interestTextField.getText().strip());
+                String ownerId = ownerTextField.getText();
+                int amount = Integer.parseInt(amountTextField.getText().strip());
+
+                String text = null;
+                try {
+                    Customer c = customerService.readCustomer(ownerId);
+
+                    Account a = new Account(id, interest, c, amount);
+
+                    accountService.updateAccount(a);
+                    text = "Succesful: " + a.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Account ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JLabel interestLabel = new JLabel("Interest: ");
+
+        JPanel interestPanel = new JPanel();
+
+        interestPanel.add(interestLabel);
+        interestPanel.add(interestTextField);
+
+        panel.add(interestPanel);
+
+        JLabel ownerLabel = new JLabel("Owner ID: ");
+
+        JPanel ownerPanel = new JPanel();
+
+        ownerPanel.add(ownerLabel);
+        ownerPanel.add(ownerTextField);
+
+        panel.add(ownerPanel);
+
+        JLabel amountLabel = new JLabel("Amount: ");
+
+        JPanel amountPanel = new JPanel();
+
+        amountPanel.add(amountLabel);
+        amountPanel.add(amountTextField);
+
+        panel.add(amountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void readAccount(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws AccountException {
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+                    Account a = accountService.readAccount(id);
+
+                    text = "Succesful: " + a.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Account ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void createCreditCard(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CardException, CustomerException {
+
+        JTextField ownerTextField = new JTextField();
+        ownerTextField.setColumns(50);
+
+        JTextField amountTextField = new JTextField();
+        amountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = ownerTextField.getText();
+                int amount = Integer.parseInt(amountTextField.getText().strip());
+
+
+                String text = null;
+                try {
+                    Customer owner = customerService.readCustomer(id);
+
+                    Card card = cardService.createCredit(owner, amount);
+
+                    text = "Succesful: " + card.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel ownerLabel = new JLabel("Owner ID: ");
+        JLabel amountLabel = new JLabel("Amount: ");
+
+        JPanel ownerPanel = new JPanel();
+
+        ownerPanel.add(ownerLabel);
+        ownerPanel.add(ownerTextField);
+
+        JPanel amountPanel = new JPanel();
+
+        amountPanel.add(amountLabel);
+        amountPanel.add(amountTextField);
+
+        panel.add(ownerPanel);
+        panel.add(amountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void createDebitCard(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CardException, AccountException {
+
+        JTextField accountTextField = new JTextField();
+        accountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = accountTextField.getText();
+
+                
+                String text = null;
+                try {
+                    Account account = accountService.readAccount(id);
+
+                    Card card = cardService.createDebit(account);
+
+                    text = "Succesful: " + card.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }   
+                
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel accountLabel = new JLabel("Account ID: ");
+
+        JPanel accountPanel = new JPanel();
+
+        accountPanel.add(accountLabel);
+        accountPanel.add(accountTextField);
+
+        panel.add(accountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void deleteCard(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws CardException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+                    cardService.deleteCard(id);
+
+                    text = "Succesful: " + "Deleted" + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }   
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Card ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void updateCard(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CardException, AccountException {
+
+        JComboBox<String> typeList = new JComboBox<String>(new String[] { "debit", "credit" });
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        panel.add(typeList);
+
+        JPanel panelForms = new JPanel();
+        panelForms.setLayout(new BoxLayout(panelForms, BoxLayout.Y_AXIS));
+
+        panel.add(panelForms);
+
+        typeList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                String type = (String) cb.getSelectedItem();
+
+                JLabel idLabel = new JLabel("Card ID: ");
+                JTextField idTextField = new JTextField();
+                idTextField.setColumns(50);
+                JPanel idPanel = new JPanel();
+                idPanel.add(idLabel);
+                idPanel.add(idTextField);
+
+                if (type.toLowerCase().equals("debit")) {
+                    JLabel accountLabel = new JLabel("Account ID: ");
+                    JTextField accountTextField = new JTextField();
+                    accountTextField.setColumns(50);
+                    JPanel accountPanel = new JPanel();
+                    accountPanel.add(accountLabel);
+                    accountPanel.add(accountTextField);
+
+                    JButton button = new JButton("SUBMIT");
+
+                    button.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            String id = idTextField.getText().strip();
+                            String accountId = accountTextField.getText().strip();
+
+                            String text = null;
+                            try {
+
+                                Account account = accountService.readAccount(accountId);
+
+                                Card c = new DebitCard(id, account);
+
+                                cardService.updateCard(c);
+
+                                text = "Succesful: " + c.toString() + "\n";
+                                // System.out.println(a.toString());
+                            } catch (Exception exception) {
+                                text = "Error: " + exception.getMessage() + "\n";
+                                // System.out.println(exception.getMessage());
+                            }
+
+                            messageTextField.setText(text);
+
+                            frame.getContentPane().remove(panel);
+
+                            frame.getContentPane().add(mainPanel);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    });
+
+                    panelForms.removeAll();
+
+                    panelForms.add(idPanel);
+                    panelForms.add(accountPanel);
+                    panelForms.add(button);
+
+                    panelForms.revalidate();
+                    panelForms.repaint();
+
+                    frame.revalidate();
+                    frame.repaint();
+                } else {
+                    JLabel amountLabel = new JLabel("Amount: ");
+                    JTextField amountTextField = new JTextField();
+                    amountTextField.setColumns(50);
+                    JPanel amountPanel = new JPanel();
+                    amountPanel.add(amountLabel);
+                    amountPanel.add(amountTextField);
+
+                    JButton button = new JButton("SUBMIT");
+
+                    button.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            String id = idTextField.getText();
+                            int amount = Integer.parseInt(amountTextField.getText());
+
+                            String text = null;
+                            try {
+
+                                Card oldCard = cardService.readCard(id);
+
+                                Card c = new CreditCard(id, oldCard.getOwner(), amount);
+
+                                cardService.updateCard(c);
+
+                                text = "Succesful: " + c.toString() + "\n";
+                                // System.out.println(a.toString());
+                            } catch (Exception exception) {
+                                text = "Error: " + exception.getMessage() + "\n";
+                                // System.out.println(exception.getMessage());
+                            }
+
+                            messageTextField.setText(text);
+
+                            frame.getContentPane().remove(panel);
+
+                            frame.getContentPane().add(mainPanel);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    });
+
+                    panelForms.removeAll();
+
+                    panelForms.add(idPanel);
+                    panelForms.add(amountPanel);
+                    panelForms.add(button);
+
+                    panelForms.revalidate();
+                    panelForms.repaint();
+
+                    frame.revalidate();
+                    frame.repaint();
+                }
+            }
+        });
+
+        typeList.setSelectedItem("debit");
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void readCard(JFrame frame, JPanel mainPanel, JTextArea messageTextField) throws CardException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                Card c;
+                try {
+                    c = cardService.readCard(id);
+
+                    text = "Succesful: " + c.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Card ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void readTransaction(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+                    Transaction t = transactionService.readTransaction(id);
+
+                    text = "Succesful: " + t.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Transaction ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void deleteTransaction(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+
+                String text = null;
+                try {
+
+                    transactionService.deleteTransaction(id);
+
+                    text = "Succesful: " + "Deleted" + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Transaction ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void updateTransaction(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException {
+
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
+
+        JTextField detailsTextField = new JTextField();
+        detailsTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id = idTextField.getText();
+                String details = detailsTextField.getText();
+
+                String text = null;
+                try {
+
+                    Transaction t = transactionService.readTransaction(id);
+                    t.setDetails(details);
+
+                    transactionService.updateTransaction(t);
+
+                    text = "Succesful: " + t.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Transaction ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JLabel detailsLabel = new JLabel("Details: ");
+
+        JPanel detailsPanel = new JPanel();
+
+        detailsPanel.add(detailsLabel);
+        detailsPanel.add(detailsTextField);
+
+        panel.add(detailsPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void createTransactionDeposit(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException, CustomerException, AccountException {
+
+        JTextField detailsTextField = new JTextField();
+        detailsTextField.setColumns(50);
+
+        JTextField amountTextField = new JTextField();
+        amountTextField.setColumns(50);
+
+        JTextField ownerTextField = new JTextField();
+        ownerTextField.setColumns(50);
+
+        JTextField accountTextField = new JTextField();
+        accountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String details = detailsTextField.getText();
+                int amount = Integer.parseInt(amountTextField.getText().strip());
+                String ownerId = ownerTextField.getText();
+                String accountId = accountTextField.getText();
+
+                String text = null;
+                try {
+
+                    Customer customer = null;
+                    if (sessionCustomers.containsKey(ownerId)) {
+                        customer = sessionCustomers.get(ownerId);
+                    } else {
+
+                        customer = customerService.readCustomer(ownerId);
+                        sessionCustomers.put(ownerId, customer);
+                    }
+
+                    Account account = accountService.readAccount(accountId);
+
+                    Transaction t = transactionService.deposit(customer, account, details,
+                            amount);
+
+                    customer.addPendingTransaction(t);
+
+                    text = "Succesful: " + t.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel detailsLabel = new JLabel("Details: ");
+
+        JPanel detailsPanel = new JPanel();
+
+        detailsPanel.add(detailsLabel);
+        detailsPanel.add(detailsTextField);
+
+        panel.add(detailsPanel);
+
+        JLabel amountLabel = new JLabel("Amount: ");
+
+        JPanel amountPanel = new JPanel();
+
+        amountPanel.add(amountLabel);
+        amountPanel.add(amountTextField);
+
+        panel.add(amountPanel);
+
+        JLabel ownerLabel = new JLabel("Customer ID: ");
+
+        JPanel ownerPanel = new JPanel();
+
+        ownerPanel.add(ownerLabel);
+        ownerPanel.add(ownerTextField);
+
+        panel.add(ownerPanel);
+
+        JLabel accountLabel = new JLabel("Account ID: ");
+
+        JPanel accountPanel = new JPanel();
+
+        accountPanel.add(accountLabel);
+        accountPanel.add(accountTextField);
+
+        panel.add(accountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    public void createTransactionWithDraw(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException, CustomerException, AccountException {
+
+        JTextField detailsTextField = new JTextField();
+        detailsTextField.setColumns(50);
+
+        JTextField amountTextField = new JTextField();
+        amountTextField.setColumns(50);
+
+        JTextField ownerTextField = new JTextField();
+        ownerTextField.setColumns(50);
+
+        JTextField accountTextField = new JTextField();
+        accountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String details = detailsTextField.getText();
+                int amount = Integer.parseInt(amountTextField.getText().strip());
+                String ownerId = ownerTextField.getText();
+                String accountId = accountTextField.getText();
+
+                String text = null;
+                try {
+
+                    Customer customer = null;
+                    if (sessionCustomers.containsKey(ownerId)) {
+                        customer = sessionCustomers.get(ownerId);
+                    } else {
+
+                        customer = customerService.readCustomer(ownerId);
+                        sessionCustomers.put(ownerId, customer);
+                    }
+
+                    Account account = accountService.readAccount(accountId);
+
+                    Transaction t = transactionService.withdraw(customer, account, details,
+                            amount);
+
+                    customer.addPendingTransaction(t);
+
+                    text = "Succesful: " + t.toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel detailsLabel = new JLabel("Details: ");
+
+        JPanel detailsPanel = new JPanel();
+
+        detailsPanel.add(detailsLabel);
+        detailsPanel.add(detailsTextField);
+
+        panel.add(detailsPanel);
+
+        JLabel amountLabel = new JLabel("Amount: ");
+
+        JPanel amountPanel = new JPanel();
+
+        amountPanel.add(amountLabel);
+        amountPanel.add(amountTextField);
+
+        panel.add(amountPanel);
+
+        JLabel ownerLabel = new JLabel("Customer ID: ");
+
+        JPanel ownerPanel = new JPanel();
+
+        ownerPanel.add(ownerLabel);
+        ownerPanel.add(ownerTextField);
+
+        panel.add(ownerPanel);
+
+        JLabel accountLabel = new JLabel("Account ID: ");
+
+        JPanel accountPanel = new JPanel();
+
+        accountPanel.add(accountLabel);
+        accountPanel.add(accountTextField);
+
+        panel.add(accountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public void createTransactionTransfer(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws TransactionException, CustomerException, AccountException {
+
+        JTextField detailsTextField = new JTextField();
+        detailsTextField.setColumns(50);
+
+        JTextField amountTextField = new JTextField();
+        amountTextField.setColumns(50);
+
+        JTextField ownerTextField = new JTextField();
+        ownerTextField.setColumns(50);
+
+        JTextField srcAccountTextField = new JTextField();
+        srcAccountTextField.setColumns(50);
+
+        JTextField dstAccountTextField = new JTextField();
+        dstAccountTextField.setColumns(50);
+
+        JButton button = new JButton("SUBMIT");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String details = detailsTextField.getText();
+                int amount = Integer.parseInt(amountTextField.getText().strip());
+                String ownerId = ownerTextField.getText();
+                String srcAccountId = srcAccountTextField.getText();
+                String dstAccountId = dstAccountTextField.getText();
+
+
+                String text = null;
+                try {
+
+                    Customer customer = null;
+                    if (sessionCustomers.containsKey(ownerId)) {
+                        customer = sessionCustomers.get(ownerId);
+                    } else {
+
+                        customer = customerService.readCustomer(ownerId);
+                        sessionCustomers.put(ownerId, customer);
+                    }
+
+                    Account srcAccount = accountService.readAccount(srcAccountId);
+                    Account dstAccount = accountService.readAccount(dstAccountId);
+
+                    Transaction[] t = transactionService.transfer(customer, srcAccount,
+                            dstAccount, details, amount);
+
+                    customer.addPendingTransaction(t[0]);
+                    customer.addPendingTransaction(t[1]);
+
+                    // System.out.println(t[0].toString());
+                    // System.out.println(t[1].toString());
+                    
+                    text = "Succesful: " + t[0].toString() + "\n";
+                    text += "Succesful: " + t[1].toString() + "\n";
+                    // System.out.println(a.toString());
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel detailsLabel = new JLabel("Details: ");
+
+        JPanel detailsPanel = new JPanel();
+
+        detailsPanel.add(detailsLabel);
+        detailsPanel.add(detailsTextField);
+
+        panel.add(detailsPanel);
+
+        JLabel amountLabel = new JLabel("Amount: ");
+
+        JPanel amountPanel = new JPanel();
+
+        amountPanel.add(amountLabel);
+        amountPanel.add(amountTextField);
+
+        panel.add(amountPanel);
+
+        JLabel ownerLabel = new JLabel("Customer ID: ");
+
+        JPanel ownerPanel = new JPanel();
+
+        ownerPanel.add(ownerLabel);
+        ownerPanel.add(ownerTextField);
+
+        panel.add(ownerPanel);
+
+        JLabel srcAccountLabel = new JLabel("Source Account ID: ");
+
+        JPanel srcAccountPanel = new JPanel();
+
+        srcAccountPanel.add(srcAccountLabel);
+        srcAccountPanel.add(srcAccountTextField);
+
+        panel.add(srcAccountPanel);
+
+        JLabel dstAccountLabel = new JLabel("Destination Account ID: ");
+
+        JPanel dstAccountPanel = new JPanel();
+
+        dstAccountPanel.add(dstAccountLabel);
+        dstAccountPanel.add(dstAccountTextField);
+
+        panel.add(dstAccountPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
+
     }
 
     // only store successful transactions
-    public void storePendingTransactions(Scanner in) throws CustomerException, AccountException, TransactionException{
-        System.out.println("Customer ID: ");
-        String ownerId = in.nextLine().strip();
+    public void storePendingTransactions(JFrame frame, JPanel mainPanel, JTextArea messageTextField)
+            throws CustomerException, AccountException, TransactionException {
 
-        Customer customer = null;
-        if (sessionCustomers.containsKey(ownerId)) {
-            customer = sessionCustomers.get(ownerId);
-        } else {
+        JTextField idTextField = new JTextField();
+        idTextField.setColumns(50);
 
-            customer = customerService.readCustomer(ownerId);
-            sessionCustomers.put(ownerId, customer);
-        }
+        JButton button = new JButton("SUBMIT");
 
-        ArrayList<Transaction> successful = customer.performPendingTransactions();
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
 
-        System.out.println("Successful transactions below");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String ownerId = idTextField.getText();
 
-        for (Transaction t : successful){
-            accountService.updateAccount(t.getAccount());
-            transactionService.createTransaction(t);
-            System.out.println(t.toString());
-        }
+
+                String text = null;
+                try {
+
+                    Customer customer = null;
+                    if (sessionCustomers.containsKey(ownerId)) {
+                        customer = sessionCustomers.get(ownerId);
+                    } else {
+
+                        customer = customerService.readCustomer(ownerId);
+                        sessionCustomers.put(ownerId, customer);
+                    }
+
+                    ArrayList<Transaction> successful = customer.performPendingTransactions();
+
+                    text = "Successful transactions below" + "\n";
+                    // System.out.println("Successful transactions below");
+
+                    for (Transaction t : successful) {
+                        accountService.updateAccount(t.getAccount());
+                        transactionService.createTransaction(t);
+                        // System.out.println(t.toString());
+                        text += t.toString() + "\n";
+                    }
+                } catch (Exception exception) {
+                    text = "Error: " + exception.getMessage() + "\n";
+                    // System.out.println(exception.getMessage());
+                }
+
+                messageTextField.setText(text);
+
+                frame.getContentPane().remove(panel);
+
+                frame.getContentPane().add(mainPanel);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        JLabel idLabel = new JLabel("Customer ID: ");
+
+        JPanel idPanel = new JPanel();
+
+        idPanel.add(idLabel);
+        idPanel.add(idTextField);
+
+        panel.add(idPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
+
+        frame.revalidate();
+        frame.repaint();
     }
 
 }

@@ -73,7 +73,7 @@ public class CustomerDL {
     }
 
     public void updateCustomer(Customer customer) throws CustomerException {
-
+    
         int res = 0;
         try {
             PreparedStatement preparedStmt = null;
@@ -98,8 +98,8 @@ public class CustomerDL {
             res = preparedStmt.executeUpdate();
             preparedStmt.close();
         } catch (Exception e) {
-            System.out.println(e.toString());
-            throw new CustomerException("Failed to update customer data. ID " + customer.getId() + " does not exist!");
+            // System.out.println(e.toString());
+            // throw new CustomerException("Failed to update customer data. ID " + customer.getId() + " does not exist!");
         }
 
         if (res == 0) {
