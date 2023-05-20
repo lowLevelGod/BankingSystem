@@ -1,9 +1,7 @@
 package pao;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -11,7 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -20,8 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import pao.BankException.CustomerException;
 
 /**
  * Hello world!
@@ -38,7 +34,7 @@ public class Main {
             "create_deposit_transaction", "create_withdraw_transaction", "create_transfer_transaction",
             "read_transaction", "update_transaction", "delete_transaction", "store_pending_transactions");
 
-    private static final HashMap<String, ActionListener> actions = new HashMap<String, ActionListener>();
+    private static final Map<String, ActionListener> actions = new HashMap<String, ActionListener>();
 
     public static Connection getConnection() {
         try {

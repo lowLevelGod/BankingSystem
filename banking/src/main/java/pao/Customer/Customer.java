@@ -1,6 +1,7 @@
 package pao.Customer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 import pao.Account.Account;
@@ -27,9 +28,9 @@ public abstract class Customer implements Typeable  {
 
     // returns successsful transactions
     // successful transactions are removed from pending list
-    public ArrayList<Transaction> performPendingTransactions() {
+    public List<Transaction> performPendingTransactions() {
 
-        ArrayList<Transaction> successful = new ArrayList<Transaction>();
+        List<Transaction> successful = new ArrayList<Transaction>();
 
         for (Transaction t : this.pendingTransactions) {
             try {

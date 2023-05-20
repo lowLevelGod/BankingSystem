@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -1601,7 +1602,7 @@ public class SystemFacade {
                         sessionCustomers.put(ownerId, customer);
                     }
 
-                    ArrayList<Transaction> successful = customer.performPendingTransactions();
+                    List<Transaction> successful = customer.performPendingTransactions();
 
                     text = "Successful transactions below" + "\n";
                     // System.out.println("Successful transactions below");

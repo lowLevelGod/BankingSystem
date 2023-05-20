@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import pao.Account.Account;
 import pao.BankException.TransactionException;
@@ -118,9 +119,9 @@ public class TransactionDL {
     }
 
     // only successful transactions will be stored
-    public ArrayList<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
+    public List<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
 
-        ArrayList<Transaction> res = new ArrayList<Transaction>();
+        List<Transaction> res = new ArrayList<Transaction>();
         for (Transaction t : customer.performPendingTransactions()) {
 
             this.createTransaction(t);

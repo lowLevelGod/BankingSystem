@@ -3,6 +3,7 @@ package pao.Transaction;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import pao.Account.Account;
 import pao.BankException.TransactionException;
@@ -62,7 +63,7 @@ public class TransactionService {
         return new Transaction[] { w, d };
     }
 
-    public ArrayList<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
+    public List<Transaction> storePendingTransactions(Customer customer) throws TransactionException {
         return transactions.storePendingTransactions(customer);
     }
 

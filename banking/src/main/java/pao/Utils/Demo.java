@@ -2,6 +2,7 @@ package pao.Utils;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import pao.Account.Account;
 import pao.Account.AccountService;
@@ -138,8 +139,8 @@ public class Demo {
         c2.addPendingTransaction(t4[0]);
         c2.addPendingTransaction(t4[1]);
 
-        ArrayList<Transaction> arr1 = transactionService.storePendingTransactions(c1);
-        ArrayList<Transaction> arr2 = transactionService.storePendingTransactions(c2);
+        List<Transaction> arr1 = transactionService.storePendingTransactions(c1);
+        List<Transaction> arr2 = transactionService.storePendingTransactions(c2);
 
         System.out.println("Storing successful demo transactions...\n");
 
