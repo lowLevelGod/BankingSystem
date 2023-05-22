@@ -23,7 +23,7 @@ public class AuditService {
         writer.flush();
     }
 
-    public AuditService() {
+    private AuditService() {
         try {
             this.writer = new FileWriter("audit.csv");
         } catch (IOException e) {

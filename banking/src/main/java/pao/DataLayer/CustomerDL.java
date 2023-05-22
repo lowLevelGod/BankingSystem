@@ -8,17 +8,26 @@ import pao.BankException.CustomerException;
 import pao.Customer.Artificial;
 import pao.Customer.Customer;
 import pao.Customer.Natural;
+import pao.Utils.DatabaseConnection;
 
 public class CustomerDL {
 
     // placeholder for database service
     // private HashMap<String, Customer> customers;
 
-    private Connection connection;
+    private static Connection connection;
 
-    public CustomerDL(Connection connection) {
+    private static CustomerDL instance = null;
+
+    public static CustomerDL getCustomerDL() {
+        if (instance == null)
+            instance = new CustomerDL();
+        return instance;
+    }
+
+    private CustomerDL() {
         // customers = new HashMap<String, Customer>();
-        this.connection = connection;
+        connection = DatabaseConnection.getConnection();
     }
 
     public void createCustomer(Customer customer) throws CustomerException {
@@ -73,7 +82,7 @@ public class CustomerDL {
     }
 
     public void updateCustomer(Customer customer) throws CustomerException {
-    
+
         int res = 0;
         try {
             PreparedStatement preparedStmt = null;
@@ -99,7 +108,8 @@ public class CustomerDL {
             preparedStmt.close();
         } catch (Exception e) {
             // System.out.println(e.toString());
-            // throw new CustomerException("Failed to update customer data. ID " + customer.getId() + " does not exist!");
+            // throw new CustomerException("Failed to update customer data. ID " +
+            // customer.getId() + " does not exist!");
         }
 
         if (res == 0) {

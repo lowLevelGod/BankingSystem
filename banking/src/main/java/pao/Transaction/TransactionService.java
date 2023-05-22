@@ -1,6 +1,5 @@
 package pao.Transaction;
 
-import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +20,8 @@ public class TransactionService {
         return id;
     }
 
-    public TransactionService(Connection connection) {
-        transactions = new TransactionDL(connection);
+    public TransactionService() {
+        transactions = TransactionDL.getTransactionDL();
     }
 
     public Withdraw withdraw(Customer customer, Account acc, String details, int amount) {

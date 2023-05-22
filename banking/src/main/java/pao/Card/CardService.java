@@ -1,7 +1,5 @@
 package pao.Card;
 
-import java.sql.Connection;
-
 import pao.Account.Account;
 import pao.BankException.CardException;
 import pao.Customer.Customer;
@@ -18,8 +16,8 @@ public class CardService {
         return id;
     }
 
-    public CardService(Connection connection) {
-        cards = new CardDL(connection);
+    public CardService() {
+        cards = CardDL.getCardDL();
     }
 
     public CreditCard createCredit(Customer owner, int amount) throws CardException {

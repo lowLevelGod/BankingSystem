@@ -1,7 +1,5 @@
 package pao.Account;
 
-import java.sql.Connection;
-
 import pao.BankException.AccountException;
 import pao.Customer.Customer;
 import pao.DataLayer.AccountDL;
@@ -10,8 +8,8 @@ public class AccountService {
     private int id = 1;
     private AccountDL accounts;
 
-    public AccountService(Connection connection) {
-        accounts = new AccountDL(connection);
+    public AccountService() {
+        accounts = AccountDL.getAccountDL();
     }
 
     public Account createBaseAccount(Customer customer) throws AccountException {

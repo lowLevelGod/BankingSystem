@@ -1,6 +1,5 @@
 package pao.Utils;
 
-import java.sql.Connection;
 import java.util.List;
 
 import pao.Account.Account;
@@ -18,17 +17,11 @@ import pao.Transaction.TransactionService;
 
 public class Demo {
 
-    private final Connection connection;
-
-    public Demo(Connection connection) {
-        this.connection = connection;
-    }
-
     public void customer() throws CustomerException {
 
         System.out.println("Customer service demo...\n");
 
-        CustomerService customerService = new CustomerService(connection);
+        CustomerService customerService = new CustomerService();
 
         System.out.println("Creating demo customers...\n");
         Customer c1 = customerService.createNatural("John", "Doe");
@@ -66,12 +59,12 @@ public class Demo {
     public void account() throws CustomerException, AccountException {
         System.out.println("Account service demo...\n");
 
-        CustomerService customerService = new CustomerService(connection);
+        CustomerService customerService = new CustomerService();
 
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService(connection);
+        AccountService accountService = new AccountService();
 
         System.out.println("Creating demo accounts...\n");
 
@@ -101,15 +94,15 @@ public class Demo {
 
     public void transaction() throws CustomerException, AccountException, TransactionException {
 
-        CustomerService customerService = new CustomerService(connection);
+        CustomerService customerService = new CustomerService();
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService(connection);
+        AccountService accountService = new AccountService();
         Account a1 = accountService.createBaseAccount(c1);
         Account a2 = accountService.createBaseAccount(c2);
 
-        TransactionService transactionService = new TransactionService(connection);
+        TransactionService transactionService = new TransactionService();
 
         Transaction t1 = transactionService.deposit(c1, a1, "deposit 300", 300);
         Transaction t2 = transactionService.deposit(c2, a2, "deposit 100000", 100000);
@@ -166,14 +159,14 @@ public class Demo {
     }
 
     public void card() throws CustomerException, CardException, AccountException {
-        CustomerService customerService = new CustomerService(connection);
+        CustomerService customerService = new CustomerService();
         Customer c1 = customerService.createNatural("Bill", "Wayne");
         Customer c2 = customerService.createArtificial("Acme Inc");
 
-        AccountService accountService = new AccountService(connection);
+        AccountService accountService = new AccountService();
         Account a2 = accountService.createBaseAccount(c2);
 
-        CardService cardService = new CardService(connection);
+        CardService cardService = new CardService();
 
         System.out.println("Card service demo...\n");
 

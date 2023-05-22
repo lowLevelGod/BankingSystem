@@ -5,9 +5,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,22 +32,6 @@ public class Main {
             "read_transaction", "update_transaction", "delete_transaction", "store_pending_transactions");
 
     private static final Map<String, ActionListener> actions = new HashMap<String, ActionListener>();
-
-    public static Connection getConnection() {
-        try {
-            String url = "jdbc:mysql://localhost:3306/bank";
-            String user = "root";
-            String password = "1234";
-
-            Connection connection = DriverManager.getConnection(url, user, password);
-            // System.out.println("It works");
-            return connection;
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-
-            return null;
-        }
-    }
 
     private static void initActions(SystemFacade systemFacade, JFrame frame, JPanel mainPanel, JTextArea messageTextField) {
         actions.put("create_natural_customer", new ActionListener() {
@@ -369,8 +350,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Connection connection = getConnection();
-        SystemFacade systemFacade = new SystemFacade(connection);
+        SystemFacade systemFacade = new SystemFacade();
         // Demo demo = new Demo(connection);
         // // demo customer service
         // demo.customer();
@@ -424,11 +404,5 @@ public class Main {
 
         }
 
-        try {
-            assert connection != null;
-            connection.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
     }
 }

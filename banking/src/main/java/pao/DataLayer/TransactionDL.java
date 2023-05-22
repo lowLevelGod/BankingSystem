@@ -12,16 +12,25 @@ import pao.Customer.Customer;
 import pao.Transaction.Deposit;
 import pao.Transaction.Transaction;
 import pao.Transaction.Withdraw;
+import pao.Utils.DatabaseConnection;
 
 public class TransactionDL {
 
     // placeholder for database service
     // private HashMap<String, Transaction> transactions;
-    private final Connection connection;
+    private static Connection connection;
 
-    public TransactionDL(Connection connection) {
-        // transactions = new HashMap<String, Transaction>();
-        this.connection = connection;
+    private static TransactionDL instance = null;
+
+    public static TransactionDL getTransactionDL() {
+        if (instance == null)
+            instance = new TransactionDL();
+        return instance;
+    }
+
+    private TransactionDL() {
+        // accounts = new HashMap<String, Account>();
+        connection = DatabaseConnection.getConnection();
     }
 
     public void createTransaction(Transaction transaction) throws TransactionException {
@@ -75,8 +84,8 @@ public class TransactionDL {
             ResultSet result = preparedStmt.executeQuery();
             result.next();
 
-            AccountDL aDl = new AccountDL(connection);
-            CustomerDL cDl = new CustomerDL(connection);
+            AccountDL aDl = AccountDL.getAccountDL();
+            CustomerDL cDl = CustomerDL.getCustomerDL();
 
             Customer customer = cDl.readCustomer(result.getString("customer"));
             Account account = aDl.readAccount(result.getString("account"));

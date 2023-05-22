@@ -1,7 +1,5 @@
 package pao.Customer;
 
-import java.sql.Connection;
-
 import pao.BankException.CustomerException;
 import pao.DataLayer.CustomerDL;
 
@@ -10,8 +8,8 @@ public class CustomerService {
     private int id = 1;
     private CustomerDL customers;
 
-    public CustomerService(Connection connection) {
-        customers = new CustomerDL(connection);
+    public CustomerService() {
+        customers = CustomerDL.getCustomerDL();
     }
 
     public Natural createNatural(String firstName, String lastName) throws CustomerException {

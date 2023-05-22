@@ -6,16 +6,25 @@ import java.sql.ResultSet;
 import pao.Account.Account;
 import pao.BankException.AccountException;
 import pao.Customer.Customer;
+import pao.Utils.DatabaseConnection;
 
 public class AccountDL {
 
     // placeholder for database service
     // private HashMap<String, Account> accounts;
-    private Connection connection;
+    private static Connection connection;
 
-    public AccountDL(Connection connection) {
+    private static AccountDL instance = null;
+
+    public static AccountDL getAccountDL() {
+        if (instance == null)
+            instance = new AccountDL();
+        return instance;
+    }
+
+    private AccountDL() {
         // accounts = new HashMap<String, Account>();
-        this.connection = connection;
+        connection = DatabaseConnection.getConnection();
     }
 
     public void createAccount(Account account) throws AccountException {
@@ -87,7 +96,7 @@ public class AccountDL {
             ResultSet result = preparedStmt.executeQuery();
             result.next();
 
-            CustomerDL cDl = new CustomerDL(connection);
+            CustomerDL cDl = CustomerDL.getCustomerDL();
             Customer owner = cDl.readCustomer(result.getString("owner"));
 
             account = new Account(id, owner, result);

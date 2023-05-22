@@ -2,7 +2,6 @@ package pao;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,11 +39,11 @@ public class SystemFacade {
 
     private final HashMap<String, Customer> sessionCustomers = new HashMap<String, Customer>();
 
-    public SystemFacade(Connection connection) {
-        customerService = new CustomerService(connection);
-        cardService = new CardService(connection);
-        accountService = new AccountService(connection);
-        transactionService = new TransactionService(connection);
+    public SystemFacade() {
+        customerService = new CustomerService();
+        cardService = new CardService();
+        accountService = new AccountService();
+        transactionService = new TransactionService();
     }
 
     public void createNaturalCustomer(JFrame frame, JPanel mainPanel, JTextArea messageTextField)

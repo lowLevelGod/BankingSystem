@@ -10,16 +10,25 @@ import pao.Card.Card;
 import pao.Card.CreditCard;
 import pao.Card.DebitCard;
 import pao.Customer.Customer;
+import pao.Utils.DatabaseConnection;
 
 public class CardDL {
 
     // placeholder for database service
     // private HashMap<String, Card> cards;
-    private final Connection connection;
+    private static Connection connection;
 
-    public CardDL(Connection connection) {
-        // cards = new HashMap<String, Card>();
-        this.connection = connection;
+    private static CardDL instance = null;
+
+    public static CardDL getCardDL() {
+        if (instance == null)
+            instance = new CardDL();
+        return instance;
+    }
+
+    private CardDL() {
+        // accounts = new HashMap<String, Account>();
+        connection = DatabaseConnection.getConnection();
     }
 
     public void createCard(Card card) throws CardException {
@@ -110,11 +119,11 @@ public class CardDL {
             result.next();
 
             if (result.getString("type").equals("Debit Card")) {
-                AccountDL aDl = new AccountDL(connection);
+                AccountDL aDl = AccountDL.getAccountDL();
                 Account account = aDl.readAccount(result.getString("account"));
                 card = new DebitCard(id, account);
             } else {
-                CustomerDL cDl = new CustomerDL(connection);
+                CustomerDL cDl = CustomerDL.getCustomerDL();
                 Customer customer = cDl.readCustomer(result.getString("customer"));
                 card = new CreditCard(id, customer, result);
             }
